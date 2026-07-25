@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["3K5K5Q6WGY.com.ditto.DittoPrototype"],
+        "components": [
+          { "/": "/*" }
+        ]
+      }
+    ]
+  }
+}
