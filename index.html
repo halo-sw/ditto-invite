@@ -115,24 +115,26 @@
   @keyframes flow1 { from { transform: translate(2%, -2%) scale(.985, 1.025); } to { transform: translate(-2.2%, 2.5%) scale(1.025, .98); } }
   @keyframes flow2 { from { transform: translate(-2.5%, 1.8%) scale(1.02, .985); } to { transform: translate(2.5%, -2.8%) scale(.99, 1.03); } }
 
-  .stub { flex: 1; display: flex; flex-direction: column; text-align: left; padding: 4.8cqw 4.4cqw 4.4cqw 4.4cqw; color: var(--ink); min-width: 0; }
+  .stub { flex: 1; display: flex; flex-direction: column; text-align: left; padding: 4.4cqw 4.4cqw 4cqw 4.4cqw; color: var(--ink); min-width: 0; }
   .avatar {
-    width: 14cqw; height: 14cqw; border-radius: 3.6cqw; overflow: hidden; flex: none;
+    width: 12.5cqw; height: 12.5cqw; border-radius: 3.2cqw; overflow: hidden; flex: none;
     display: flex; align-items: flex-end; justify-content: center; background: linear-gradient(180deg, #CAB7F2, #B092ED);
     box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.8), 0 .6cqw 2.4cqw rgba(90,20,120,.18);
   }
   .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .avatar svg { width: 72%; height: 72%; fill: rgba(255,255,255,.92); }
    /* 프로필 묶음(사진 → From)을 위에, 기록 묶음(Sent · Code · 바코드)을 아래에 — 두 묶음 사이만 넓게 */
-  .who { margin-top: 2.6cqw; }
-  .rows { margin-top: auto; padding-top: 1.6cqw; display: flex; flex-direction: column; gap: 1.2cqw; }
+  .who { margin-top: 2.2cqw; }
+  .rows { margin-top: 2cqw; display: flex; flex-direction: column; gap: 1.2cqw; }
   .row dt { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.5cqw; color: var(--violet); line-height: 1.2; margin-bottom: .4cqw; }
-  .row dd { font-size: 3.6cqw; line-height: 1.2; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row dd { font-size: 3.4cqw; line-height: 1.2; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .row dd.kr { font-size: 4.4cqw; letter-spacing: -.02em; }
-  .row dd small { display: block; margin-top: .3cqw; font-size: 2.8cqw; font-weight: 500; color: #6B6475; letter-spacing: 0; }
+  .row dd small { display: inline; margin-left: 1.2cqw; font-size: 2.8cqw; font-weight: 500; color: #6B6475; letter-spacing: 0; }
   .row dd.code { font-family: var(--round); font-style: normal; font-weight: 800; letter-spacing: .06em; }
   .row dd.date { font-family: var(--round); font-weight: 800; }
-  .barcode { margin-top: 2.2cqw; width: 100%; height: 6.4cqw; display: block; }
+  /* 한마디 — 바코드 자리. 손으로 쓴 쪽지처럼 가볍게, 위에 점선 */
+  .msg { margin-top: auto; padding-top: 1.8cqw; border-top: .25cqw dashed rgba(138,130,146,.45); font-size: 3.6cqw; line-height: 1.3; font-weight: 600; letter-spacing: -.02em; color: var(--ink);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
   .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
@@ -144,12 +146,17 @@
     background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgba(255,255,255,.75), rgba(255,255,255,0) 46%); opacity: var(--go, .45); }
 
   .back { display: flex; flex-direction: column; justify-content: space-between; padding: 5cqw 5.4cqw; text-align: left; }
-  .back .top, .back .bottom { display: flex; justify-content: space-between; align-items: baseline; }
+  .back .top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: baseline; }
   .back .k { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.8cqw; color: var(--violet); }
   .back .n { font-family: var(--round); font-weight: 800; font-size: 2.6cqw; color: var(--ink-3); }
-  .press { align-self: center; width: 54cqw; height: auto; color: var(--stock-back);
-    filter: drop-shadow(-.22cqw -.22cqw 0 rgba(255,255,255,.95)) drop-shadow(.25cqw .3cqw .25cqw rgba(90,20,120,.2)); }
-  .back .msg { font-size: 3.8cqw; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+  .press { position: absolute; left: 23cqw; top: 23.4cqw; width: 54cqw; height: auto;
+    filter: drop-shadow(var(--hx, -.2cqw) var(--hy, -.26cqw) 0 rgba(255,255,255,.95)) drop-shadow(var(--sx, .25cqw) var(--sy, .33cqw) .4cqw var(--shade, rgba(90,20,120,.28))); }
+  /* 뒷면 — 키 컬러가 종이에 옅게 번지고, 그 색이 섞인 워드마크가 눌려 있다 */
+  .bloom { position: absolute; inset: 0; pointer-events: none; filter: blur(10cqw); opacity: .32; }
+  .bloom i { position: absolute; border-radius: 50%; }
+  .bloom i:nth-child(1) { width: 46cqw; height: 26cqw; left: 13cqw; top: 16.3cqw; }
+  .bloom i:nth-child(2) { width: 40cqw; height: 24cqw; left: 42cqw; top: 27.3cqw; }
+  .bloom i:nth-child(3) { width: 36cqw; height: 22cqw; left: 50cqw; top: 14.3cqw; }
 
   .hint { margin-top: 16px; font-size: 13px; color: var(--ink-3); }
 
@@ -183,6 +190,12 @@
   .foot { margin-top: 28px; font-family: var(--round); font-style: italic; font-weight: 800; font-size: 14px; color: var(--ink-3); }
   .foot a { color: inherit; text-decoration: none; }
 
+  /* 데모 갤러리(demo.html) 칸 — ?card : 카드만 */
+  html.cardonly body { background: transparent; }
+  html.cardonly .gnb, html.cardonly .page > :not(.stage), html.cardonly .blob { display: none !important; }
+  html.cardonly .page { max-width: none; padding: 18px 22px 30px; }
+  html.cardonly .stage { margin: 0; }
+
   /* 링크 미리보기(og-invite.png) 촬영용 — ?og */
   html.og body { background: radial-gradient(60% 70% at 15% 10%, rgba(180,108,224,.95), rgba(180,108,224,0) 70%), radial-gradient(55% 70% at 90% 15%, rgba(224,135,230,.95), rgba(224,135,230,0) 70%), linear-gradient(180deg, #C07FE6 0%, #EE9FE3 55%, #FBD3EE 100%); }
   html.og .gnb, html.og .page > :not(.stage), html.og .blob { display: none !important; }
@@ -195,14 +208,14 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="wm" viewBox="0 0 370 134"><g >
-<path d="M140.496 15.9557C140.496 15.9557 120.588 0.280443 77.741 0C75.1142 15.1439 70.3181 40.5535 64.7177 70.738C62.9542 43.2029 47.0902 38.4354 38.4278 40.2214C16.9782 44.6568 -7.18676 84.0886 2.00698 112.362C11.2745 140.863 52.9341 134.251 70.0377 130.76C70.0082 130.672 69.986 130.583 69.9565 130.502C69.6392 101.808 73.2695 62.1993 99.2053 37.6974C110.709 26.8339 128.779 16.7749 140.503 15.9631L140.496 15.9557ZM53.3989 115.52C49.7982 119.454 41.7481 114.133 34.554 104.775C19.7673 85.5203 20.4609 63.941 31.1746 63.8081C36.9742 63.7343 42.6778 68.1255 48.7357 86.2288C52.3069 96.9077 55.5535 113.159 53.3916 115.52H53.3989Z" fill="currentColor"></path>
-<path d="M227.933 118.015C241.332 137.756 263.121 132.214 273.399 124.827C306.345 101.173 287.102 40.3986 240.579 40.3986C222.937 40.3986 214.083 53.3063 212.74 63.3284C225.121 65.7712 236.005 73.7417 240.454 80.9742C245.804 67.3063 250.909 63.7343 256.097 63.8008C266.81 63.941 267.083 87.2915 252.717 104.775C248.253 110.199 238.366 118.79 227.933 118.015Z" fill="currentColor"></path>
-<path d="M109.174 37.594C110.62 39.1586 152.811 54.1254 167.14 62.1845C186.693 73.1881 162.396 55.8228 162.396 55.8228L149.328 130.605H181.425L170.512 46.8929C175.338 49.5129 191.202 54.4944 204.852 48.797C222.775 39.5055 211.877 -0.819233 109.167 37.594H109.174Z" fill="currentColor"></path>
-<path d="M243.811 87.9409C243.811 87.9409 243.833 87.904 243.841 87.8818C243.818 87.8818 243.796 87.8818 243.774 87.8966C243.782 87.9114 243.796 87.9335 243.804 87.9483L243.811 87.9409Z" fill="currentColor"></path>
-<path d="M189.401 102.472C187.918 99.7416 187.653 98.6568 186.376 96.2435C132.926 110.022 90.1887 90.5387 144.827 66.8486C138.511 59.6088 114.523 54.6346 94.3281 60.5977C89.4065 62.0516 88.0194 63.4833 87.8349 64.3837C85.3336 72.2066 109.115 66.0073 80.1907 130.598L189.394 102.465L189.401 102.472Z" fill="currentColor"></path>
-<path d="M237.694 92.5239C230.242 78.1549 196.75 62.8856 168.033 60.214C164.735 59.9778 187.07 79.0184 202.262 91.5202L194.419 130.598H220.384L211.345 98.6346C221.461 109.653 234.809 110.915 238.056 104.605C239.635 101.542 240.218 97.3874 237.694 92.5239Z" fill="currentColor"></path>
-<path d="M322.297 93.6236C320.18 95.7491 317.066 95.9041 315.516 91.8081C314.653 89.5129 312.513 84.1698 306.906 76.9594C303.895 73.0849 298.228 67.2177 294.628 60.4059C290.769 53.107 290.009 48.9742 290.621 42.7823C291.425 34.7749 299.453 24.8782 310.639 25.5646C330.259 26.7675 328.791 52.3985 328.791 52.3985C328.791 52.3985 340.427 27.9852 359.087 35.9779C369.366 40.3838 371.498 53.4686 369.1 60.4059C364.392 74.0148 346.942 79.3579 340.272 82.5683C330.222 87.3948 327.462 88.4428 322.29 93.6236H322.297Z" fill="currentColor"></path>
-<path d="M312.44 131.55C319.775 131.55 325.721 125.602 325.721 118.266C325.721 110.929 319.775 104.982 312.44 104.982C305.105 104.982 299.158 110.929 299.158 118.266C299.158 125.602 305.105 131.55 312.44 131.55Z" fill="currentColor"></path>
+<path d="M140.496 15.9557C140.496 15.9557 120.588 0.280443 77.741 0C75.1142 15.1439 70.3181 40.5535 64.7177 70.738C62.9542 43.2029 47.0902 38.4354 38.4278 40.2214C16.9782 44.6568 -7.18676 84.0886 2.00698 112.362C11.2745 140.863 52.9341 134.251 70.0377 130.76C70.0082 130.672 69.986 130.583 69.9565 130.502C69.6392 101.808 73.2695 62.1993 99.2053 37.6974C110.709 26.8339 128.779 16.7749 140.503 15.9631L140.496 15.9557ZM53.3989 115.52C49.7982 119.454 41.7481 114.133 34.554 104.775C19.7673 85.5203 20.4609 63.941 31.1746 63.8081C36.9742 63.7343 42.6778 68.1255 48.7357 86.2288C52.3069 96.9077 55.5535 113.159 53.3916 115.52H53.3989Z"></path>
+<path d="M227.933 118.015C241.332 137.756 263.121 132.214 273.399 124.827C306.345 101.173 287.102 40.3986 240.579 40.3986C222.937 40.3986 214.083 53.3063 212.74 63.3284C225.121 65.7712 236.005 73.7417 240.454 80.9742C245.804 67.3063 250.909 63.7343 256.097 63.8008C266.81 63.941 267.083 87.2915 252.717 104.775C248.253 110.199 238.366 118.79 227.933 118.015Z"></path>
+<path d="M109.174 37.594C110.62 39.1586 152.811 54.1254 167.14 62.1845C186.693 73.1881 162.396 55.8228 162.396 55.8228L149.328 130.605H181.425L170.512 46.8929C175.338 49.5129 191.202 54.4944 204.852 48.797C222.775 39.5055 211.877 -0.819233 109.167 37.594H109.174Z"></path>
+<path d="M243.811 87.9409C243.811 87.9409 243.833 87.904 243.841 87.8818C243.818 87.8818 243.796 87.8818 243.774 87.8966C243.782 87.9114 243.796 87.9335 243.804 87.9483L243.811 87.9409Z"></path>
+<path d="M189.401 102.472C187.918 99.7416 187.653 98.6568 186.376 96.2435C132.926 110.022 90.1887 90.5387 144.827 66.8486C138.511 59.6088 114.523 54.6346 94.3281 60.5977C89.4065 62.0516 88.0194 63.4833 87.8349 64.3837C85.3336 72.2066 109.115 66.0073 80.1907 130.598L189.394 102.465L189.401 102.472Z"></path>
+<path d="M237.694 92.5239C230.242 78.1549 196.75 62.8856 168.033 60.214C164.735 59.9778 187.07 79.0184 202.262 91.5202L194.419 130.598H220.384L211.345 98.6346C221.461 109.653 234.809 110.915 238.056 104.605C239.635 101.542 240.218 97.3874 237.694 92.5239Z"></path>
+<path d="M322.297 93.6236C320.18 95.7491 317.066 95.9041 315.516 91.8081C314.653 89.5129 312.513 84.1698 306.906 76.9594C303.895 73.0849 298.228 67.2177 294.628 60.4059C290.769 53.107 290.009 48.9742 290.621 42.7823C291.425 34.7749 299.453 24.8782 310.639 25.5646C330.259 26.7675 328.791 52.3985 328.791 52.3985C328.791 52.3985 340.427 27.9852 359.087 35.9779C369.366 40.3838 371.498 53.4686 369.1 60.4059C364.392 74.0148 346.942 79.3579 340.272 82.5683C330.222 87.3948 327.462 88.4428 322.29 93.6236H322.297Z"></path>
+<path d="M312.44 131.55C319.775 131.55 325.721 125.602 325.721 118.266C325.721 110.929 319.775 104.982 312.44 104.982C305.105 104.982 299.158 110.929 299.158 118.266C299.158 125.602 305.105 131.55 312.44 131.55Z"></path>
 </g></symbol>
   <symbol id="mk" viewBox="0 0 27 27"><path d="M22.4989 2.5898C22.4989 2.5898 19.3108 0.045519 12.4493 0C12.0287 2.45803 11.2606 6.5823 10.3638 11.4816C10.0814 7.01233 7.54098 6.2385 6.15379 6.52839C2.71889 7.24831 -1.15083 13.6485 0.321433 18.2376C1.80552 22.8638 8.47681 21.7905 11.2157 21.2239C11.211 21.2095 11.2075 21.1952 11.2027 21.1819C11.1519 16.5247 11.7333 10.0957 15.8866 6.11872C17.7286 4.35546 20.6225 2.72276 22.5 2.59099L22.4989 2.5898ZM8.55124 18.7503C7.97463 19.3887 6.6855 18.525 5.53344 17.0061C3.16553 13.8809 3.2766 10.3784 4.99228 10.3568C5.92102 10.3448 6.83439 11.0575 7.80448 13.9959C8.37638 15.7292 8.89626 18.367 8.55007 18.7503H8.55124Z"/>
 <path d="M19.3565 20.0126C19.0172 20.3564 18.5182 20.3815 18.2698 19.719C18.1315 19.3478 17.7886 18.4837 16.89 17.3175C16.4075 16.6909 15.4994 15.742 14.9223 14.6403C14.304 13.4598 14.1821 12.7915 14.2803 11.7901C14.4092 10.4951 15.6957 8.89446 17.4883 9.00547C20.6324 9.20002 20.3971 13.3454 20.3971 13.3454C20.3971 13.3454 22.2618 9.39696 25.2522 10.6896C26.8993 11.4022 27.2411 13.5184 26.8568 14.6403C26.1024 16.8413 23.3059 17.7055 22.2369 18.2247C20.6264 19.0053 20.1843 19.1748 19.3554 20.0126H19.3565Z"/>
@@ -211,7 +224,7 @@
 <span class="blob b1" aria-hidden="true"></span><span class="blob b2" aria-hidden="true"></span>
 
 <header class="gnb">
-  <a href="https://ditto.at/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm"/></svg></a>
+  <a href="https://ditto.at/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm" fill="currentColor"/></svg></a>
   <a class="pill" id="getApp" href="https://ditto.at/download/">앱 받기</a>
 </header>
 
@@ -231,14 +244,14 @@
             <div class="row"><dt>Sent</dt><dd class="date" id="sent">—</dd></div>
             <div class="row"><dt>Code</dt><dd class="code" id="codeOnCard">------</dd></div>
           </dl>
-          <svg class="barcode" id="barcode" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <p class="msg" id="msg">우리 방 놀러 와 👋</p>
         </div>
         <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
       </div>
       <div class="face back" aria-hidden="true">
-        <div class="top"><span class="k">Invitation_</span><span class="n" id="backNo">No. ------</span></div>
-        <svg class="press" viewBox="0 0 370 134"><use href="#wm"/></svg>
-        <div class="bottom"><span class="msg">같이 플래터 꾸미자!</span><span class="n" id="backUrl">i.ditto.at</span></div>
+        <div class="bloom"><i id="bl0"></i><i id="bl1"></i><i id="bl2"></i></div>
+        <svg class="press" viewBox="0 0 370 134"><defs><linearGradient id="pressFill" x1="0" y1="0" x2="1" y2="1"><stop id="pf0" offset="0"/><stop id="pf1" offset=".5"/><stop id="pf2" offset="1"/></linearGradient></defs><use href="#wm" fill="url(#pressFill)"/></svg>
+        <div class="top"><span class="k">Invitation_</span><span class="n" id="backNo" hidden></span></div>
         <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
       </div>
     </div>
@@ -305,14 +318,14 @@
     defs += '<linearGradient id="' + id + 'mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#FBF6FF"/><stop offset="1" stop-color="#EFE3FF"/></linearGradient>' +
       '<filter id="' + id + 'm" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">' +
         '<feGaussianBlur in="SourceAlpha" stdDeviation="' + L * .03 + '" result="h"/>' +
-        '<feDiffuseLighting in="h" surfaceScale="' + L * .06 + '" diffuseConstant="1.1" lighting-color="#fff" result="d"><feDistantLight class="lt" azimuth="235" elevation="52"/></feDiffuseLighting>' +
-        '<feColorMatrix in="d" type="matrix" values="0 0 0 0 ' + tr + '  0 0 0 0 ' + tg + '  0 0 0 0 ' + tb + '  -1.15 0 0 0 1.02" result="shade"/>' +
+        '<feDiffuseLighting in="h" surfaceScale="' + L * .045 + '" diffuseConstant="1.1" lighting-color="#fff" result="d"><feDistantLight class="lt" azimuth="235" elevation="52"/></feDiffuseLighting>' +
+        '<feColorMatrix in="d" type="matrix" values="0 0 0 0 ' + tr + '  0 0 0 0 ' + tg + '  0 0 0 0 ' + tb + '  -.62 0 0 0 .55" result="shade"/>' +
         '<feComposite in="shade" in2="SourceGraphic" operator="over" result="body"/>' +
-        '<feSpecularLighting in="h" surfaceScale="' + L * .06 + '" specularConstant="1.1" specularExponent="26" lighting-color="#fff" result="sp"><feDistantLight class="lt" azimuth="235" elevation="58"/></feSpecularLighting>' +
-        '<feComposite in="body" in2="sp" operator="arithmetic" k2="1" k3=".85" result="lit"/>' +
+        '<feSpecularLighting in="h" surfaceScale="' + L * .045 + '" specularConstant=".9" specularExponent="30" lighting-color="#fff" result="sp"><feDistantLight class="lt" azimuth="235" elevation="58"/></feSpecularLighting>' +
+        '<feComposite in="body" in2="sp" operator="arithmetic" k2="1" k3=".45" result="lit"/>' +
         '<feComposite in="lit" in2="SourceAlpha" operator="in" result="mark"/>' +
         '<feGaussianBlur in="SourceAlpha" stdDeviation="' + L * .035 + '" result="sb"/><feOffset in="sb" dy="' + L * .035 + '" result="so"/>' +
-        '<feFlood flood-color="' + tint + '" flood-opacity=".55"/><feComposite in2="so" operator="in" result="drop"/>' +
+        '<feFlood flood-color="' + tint + '" flood-opacity=".3"/><feComposite in2="so" operator="in" result="drop"/>' +
         '<feMerge><feMergeNode in="drop"/><feMergeNode in="mark"/></feMerge>' +
       '</filter>';
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -323,21 +336,6 @@
       '<rect width="' + W + '" height="' + H + '" fill="url(#' + id + 'v)"/>' +
       '<rect width="' + W + '" height="' + H + '" fill="none" stroke="#fff" stroke-width="' + (s * 26 / 240) + '" opacity=".68" filter="url(#' + id + 'r)"/>' +
       '<g filter="url(#' + id + 'm)"><use href="#mk" x="' + (W - L) / 2 + '" y="' + (H - L) / 2 + '" width="' + L + '" height="' + L + '" fill="url(#' + id + 'mg)"/></g>';
-  }
-
-  // ── Code128-B (실제로 찍힌다: i.ditto.at/{코드}) ──
-  var C128 = ["212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"];
-  function drawBarcode(svg, text) {
-    var vals = [104], sum = 104;
-    for (var i = 0; i < text.length; i++) { var v = text.charCodeAt(i) - 32; vals.push(v); sum += v * (i + 1); }
-    vals.push(sum % 103); vals.push(106);
-    var x = 10, rects = "";
-    vals.forEach(function (v) {
-      var pat = C128[v];
-      for (var j = 0; j < pat.length; j++) { var w = +pat[j]; if (j % 2 === 0) rects += '<rect x="' + x + '" y="0" width="' + w + '" height="1"/>'; x += w; }
-    });
-    svg.setAttribute("viewBox", "0 0 " + (x + 10) + " 1");
-    svg.innerHTML = '<g fill="#16121B">' + rects + "</g>";
   }
 
   // ── 링크 해석 ──
@@ -382,8 +380,20 @@
   function fmtDate(d) { return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0"); }
   $("sent").textContent = fmtDate(new Date());
   $("codeOnCard").textContent = code; $("codeBtn").textContent = code;
-  $("backNo").textContent = "No. " + code; $("backUrl").textContent = "i.ditto.at/" + code;
-  drawBarcode($("barcode"), "i.ditto.at/" + code);
+  // 한마디 — 초대하는 사람이 앱에서 고른 번호(?m=). 아무 글이나 끼워 넣을 수 없게 번호만 받는다 (앱 InviteMessage와 같은 목록)
+  var MESSAGES = ["우리 방 놀러 와 👋", "너라서 초대했어", "같이 꾸미자, 우리 방", "통하면 디토해!", "15명 안에 너 있어"];
+  var mi = parseInt(q.get("m"), 10);
+  $("msg").textContent = MESSAGES[mi >= 0 && mi < MESSAGES.length ? mi : 0];
+  // 발급 번호 — 초대장이 발급된 순서 (invite_card_no). 모르면 감춘다
+  function showNo(n) { if (n > 0) { $("backNo").textContent = "No. " + (n < 10000 ? String(n).padStart(4, "0") : n); $("backNo").hidden = false; } }
+  // 뒷면 — 키 컬러를 종이에 번지게, 워드마크엔 흰빛에 섞어서
+  (function () {
+    var p = PALETTES[current], mixW = function (h, t) { var r = parseInt(h.slice(1, 3), 16), g = parseInt(h.slice(3, 5), 16), b = parseInt(h.slice(5, 7), 16); return "rgb(" + [r, g, b].map(function (c) { return Math.round(c + (255 - c) * t); }).join(",") + ")"; };
+    for (var k = 0; k < 3; k++) { $("bl" + k).style.background = p.colors[k]; }
+    $("pf0").setAttribute("stop-color", mixW(p.colors[0], .62)); $("pf1").setAttribute("stop-color", mixW(p.colors[2], .58)); $("pf2").setAttribute("stop-color", mixW(p.colors[1], .62));
+    var d = darkest(p.colors), r = parseInt(d.slice(1, 3), 16), g = parseInt(d.slice(3, 5), 16), b = parseInt(d.slice(5, 7), 16);
+    $("card").style.setProperty("--shade", "rgba(" + r + "," + g + "," + b + ",.28)");
+  })();
 
   var HANDLE = { lavender: ["#CAB7F2", "#B092ED"], slate: ["#A8B3BF", "#79899B"], lime: ["#C5D593", "#A5BE57"], teal: ["#8FB2BD", "#5C8F9F"], gold: ["#D5C194", "#BF9F5B"], coral: ["#EDAE91", "#E07B4C"], pink: ["#EEAFC7", "#E37CA2"], sage: ["#B3BDA6", "#85946F"], mauve: ["#B5ADBA", "#908498"], sky: ["#ADD5E5", "#79BBD4"] };
   function showPerson(p) {
@@ -412,7 +422,13 @@
   var card = $("card"), stage = $("stage"), flipped = false, down = null, moved = false, idle = !reduce, t0 = performance.now();
   // 로고가 받는 빛 — 카드가 기울면 빛의 방향(azimuth)이 따라 돈다
   var lights = [].slice.call(document.querySelectorAll("#g .lt"));
-  function aimLight(rx, ry) { var az = 235 + ry * 4 - rx * 4; lights.forEach(function (l) { l.setAttribute("azimuth", az); }); }
+  function aimLight(rx, ry) {
+    var az = 235 + ry * 4 - rx * 4; lights.forEach(function (l) { l.setAttribute("azimuth", az); });
+    // 뒷면 눌린 워드마크도 같은 빛 — 하이라이트는 빛 쪽, 그늘은 반대쪽
+    var lx = -.55 - ry / 14, ly = -.75 + rx / 14;
+    card.style.setProperty("--hx", (lx * .35) + "cqw"); card.style.setProperty("--hy", (ly * .35) + "cqw");
+    card.style.setProperty("--sx", (-lx * .45) + "cqw"); card.style.setProperty("--sy", (-ly * .45) + "cqw");
+  }
   function apply(rx, ry, lx, ly, live) {
     card.classList.toggle("live", !!live);
     aimLight(rx, ry);
@@ -457,6 +473,7 @@
     card.style.setProperty("--gx", (50 + ry * 5) + "%"); card.style.setProperty("--gy", (30 - rx * 4) + "%"); card.style.setProperty("--px", (50 - ry * 5) + "%");
     requestAnimationFrame(sway);
   }
+  if (demo && q.has("card")) { document.documentElement.classList.add("cardonly"); idle = false; card.style.transition = "none"; rest(); card.classList.remove("live"); }
   if (demo && q.has("og")) { document.documentElement.classList.add("og"); idle = false; card.style.transition = "none"; apply(-4, 10, 70, 15, false); card.classList.remove("live"); }
   if (demo && q.has("back")) { flipped = true; idle = false; card.style.transition = "none"; rest(); card.classList.remove("live"); }
   if (idle) requestAnimationFrame(sway);
@@ -472,6 +489,7 @@
 
   // ── 보낸 사람 ──
   if (demo) {
+    showNo(+(q.get("no") || 42));
     showPerson({ name: q.has("name") ? q.get("name") || null : "지우", handle: q.has("h") ? handleQ || null : "jiwoo", color: q.get("c") || "lavender", avatar: q.get("av") || null });
     return;
   }
@@ -481,6 +499,8 @@
     .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
   var prof = handleQ ? fetch(SB + "/rest/v1/profiles?select=nickname,handle,avatar_url,handle_color&handle=eq." + encodeURIComponent(handleQ.toLowerCase()) + "&limit=1", { headers: { apikey: KEY } })
     .then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) { return rows && rows[0] || null; }).catch(function () { return null; }) : Promise.resolve(null);
+  fetch(SB + "/rest/v1/rpc/invite_card_no", { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ code: code }) })
+    .then(function (r) { return r.ok ? r.json() : null; }).then(function (n) { if (typeof n === "number") showNo(n); }).catch(function () {});
   Promise.all([owner, prof]).then(function (res) {
     var name = typeof res[0] === "string" ? res[0] : null, p = res[1];
     if (!name) { handleQ = ""; syncOpen(); return; }
