@@ -11,25 +11,25 @@
 <meta property="og:site_name" content="ditto!">
 <meta property="og:title" content="ditto! 초대장이 도착했어요">
 <meta property="og:description" content="친한 친구 15명만 들어오는 방. 초대코드로 들어오면 바로 친구가 돼요.">
-<meta property="og:image" content="https://i.ditto.at/og-invite.png">
+<meta property="og:image" content="https://i.ditto.place/og-invite.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://i.ditto.at/og-invite.png">
-<link rel="icon" href="https://ditto.at/favicon.ico">
-<link rel="apple-touch-icon" href="https://ditto.at/apple-touch-icon.png">
+<meta name="twitter:image" content="https://i.ditto.place/og-invite.png">
+<link rel="icon" href="https://ditto.place/favicon.ico">
+<link rel="apple-touch-icon" href="https://ditto.place/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,700;1,800;1,900&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <!--
-  ditto! 초대장 · i.ditto.at/{6자 코드}?h={보낸 사람 계정}&p={그래픽} (2026-10-12 · v2)
-  · 무드 = ditto.at 히어로 그대로: 퍼플→핑크→화이트 하늘, 떠다니는 빛 두 덩이, Nunito 이탤릭 아이브로, 검정 알약 버튼 + 유리 알약 버튼.
+  ditto! 초대장 · i.ditto.place/{6자 코드}?h={보낸 사람 계정}&p={그래픽} (2026-10-12 · v2)
+  · 무드 = ditto.place 히어로 그대로: 퍼플→핑크→화이트 하늘, 떠다니는 빛 두 덩이, Nunito 이탤릭 아이브로, 검정 알약 버튼 + 유리 알약 버튼.
   · 카드 그래픽 = 디자인 시스템 '앱 아이콘 · 은은한 빛' (brand.fluidPalettes · brand.appIcon) + 흰 디토 로고. 6계열.
   · 사진 = 보낸 사람의 프로필 사진 (profiles.avatar_url, 이름이 invite_owner와 같을 때만).
-  · [디토 앱에서 열기] = ditto.at/i/{코드}… — 같은 도메인 링크는 유니버설 링크가 열리지 않아 도메인을 바꿔 연다.
-    앱이 있으면 앱이 열리고(초대한 친구에게 친구 신청 · 가입 전이면 코드 보관), 없으면 ditto.at이 ?noapp=1을 붙여 여기로 돌려보낸다.
+  · [디토 앱에서 열기] = ditto.place/i/{코드}… — 같은 도메인 링크는 유니버설 링크가 열리지 않아 도메인을 바꿔 연다.
+    앱이 있으면 앱이 열리고(초대한 친구에게 친구 신청 · 가입 전이면 코드 보관), 없으면 ditto.place이 ?noapp=1을 붙여 여기로 돌려보낸다.
   · 앱(DittoPrototype/Views/InviteTicket.swift)과 같은 값으로 그린다 — 바꾸면 두 곳 모두.
 -->
 <style>
@@ -48,7 +48,7 @@
     min-height: 100svh; overflow-x: hidden; overflow-x: clip;
     font-family: var(--kr); color: var(--ink); letter-spacing: -.01em; word-break: keep-all;
     -webkit-font-smoothing: antialiased;
-    /* ditto.at 히어로 하늘 */
+    /* ditto.place 히어로 하늘 */
     background:
       radial-gradient(58% 34% at 12% 4%, rgba(180,108,224,.95), rgba(180,108,224,0) 70%),
       radial-gradient(52% 32% at 90% 7%, rgba(224,135,230,.95), rgba(224,135,230,0) 70%),
@@ -66,7 +66,7 @@
   @keyframes fl1 { to { transform: translate(18vw, 8vh) scale(1.1); } }
   @keyframes fl2 { to { transform: translate(-14vw, 12vh) scale(.92); } }
 
-  /* 상단 유리 알약 — ditto.at GNB */
+  /* 상단 유리 알약 — ditto.place GNB */
   .gnb {
     position: sticky; top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 20;
     width: min(calc(100% - 32px), 560px); height: 56px; margin: 12px auto 0;
@@ -103,6 +103,11 @@
   .front { display: flex; }
   .graphic { position: relative; width: 60%; height: 100%; overflow: hidden; }
   .graphic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  /* 시리얼 넘버 각인 (2026-10-12 · 앱 InviteSerialEngraving과 같음) — 그래픽 면에 눌러 새긴 발급 번호 */
+  .serial { position: absolute; left: 7.3%; bottom: 6%; font-family: ui-rounded, var(--round); font-weight: 900; line-height: 1.05;
+    color: rgba(22,18,27,.2); text-shadow: .3cqw .4cqw 0 rgba(255,255,255,.75), -.17cqw -.22cqw 0 rgba(22,18,27,.3); }
+  .serial small { display: block; font-size: 1.9cqw; letter-spacing: .35cqw; }
+  .serial b { display: block; font-size: 5.2cqw; letter-spacing: .3cqw; font-variant-numeric: tabular-nums; font-weight: 900; }
   .graphic::after { content: ""; position: absolute; top: 0; bottom: 0; right: 0; border-right: .35cqw dashed rgba(255,255,255,.7); }
   .flow { transform-box: view-box; transform-origin: 50% 50%; }
   @media (prefers-reduced-motion: no-preference) {
@@ -151,17 +156,12 @@
   .back .n { font-family: var(--round); font-weight: 800; font-size: 2.6cqw; color: var(--ink-3); }
   .press { position: absolute; left: 23cqw; top: 23.4cqw; width: 54cqw; height: auto;
     filter: drop-shadow(var(--hx, -.2cqw) var(--hy, -.26cqw) 0 rgba(255,255,255,.95)) drop-shadow(var(--sx, .25cqw) var(--sy, .33cqw) .4cqw var(--shade, rgba(90,20,120,.28))); }
-  /* 뒷면 — 키 컬러가 종이에 옅게 번지고, 그 색이 섞인 워드마크가 눌려 있다 */
-  .bloom { position: absolute; inset: 0; pointer-events: none; filter: blur(10cqw); opacity: .32; }
-  .bloom i { position: absolute; border-radius: 50%; }
-  .bloom i:nth-child(1) { width: 46cqw; height: 26cqw; left: 13cqw; top: 16.3cqw; }
-  .bloom i:nth-child(2) { width: 40cqw; height: 24cqw; left: 42cqw; top: 27.3cqw; }
-  .bloom i:nth-child(3) { width: 36cqw; height: 22cqw; left: 50cqw; top: 14.3cqw; }
+  /* 뒷면 — 종이 위 키 컬러 단색 워드마크 (그라데이션 없음) */
 
   .hint { margin-top: 16px; font-size: 13px; color: var(--ink-3); }
 
 
-  /* 행동 — ditto.at 버튼 */
+  /* 행동 — ditto.place 버튼 */
   .actions { width: 100%; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 24px; border-radius: 999px; border: none;
@@ -224,8 +224,8 @@
 <span class="blob b1" aria-hidden="true"></span><span class="blob b2" aria-hidden="true"></span>
 
 <header class="gnb">
-  <a href="https://ditto.at/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm" fill="currentColor"/></svg></a>
-  <a class="pill" id="getApp" href="https://ditto.at/download/">앱 받기</a>
+  <a href="https://ditto.place/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm" fill="currentColor"/></svg></a>
+  <a class="pill" id="getApp" href="https://ditto.place/download/">앱 받기</a>
 </header>
 
 <main class="page">
@@ -236,7 +236,7 @@
   <div class="stage" id="stage">
     <div class="card" id="card" role="button" tabindex="0" aria-label="초대장 — 눌러서 뒤집기">
       <div class="face front">
-        <div class="graphic" aria-hidden="true"><svg id="g"></svg></div>
+        <div class="graphic" aria-hidden="true"><svg id="g"></svg><div class="serial" id="serial" hidden><small>SERIAL NO.</small><b id="serialNo"></b></div></div>
         <div class="stub">
           <div class="avatar" id="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5a5.2 5.2 0 1 1 0 10.4 5.2 5.2 0 0 1 0-10.4ZM3.5 22c.5-4.3 4-7 8.5-7s8 2.7 8.5 7Z"/></svg></div>
           <dl class="row who"><dt>From</dt><dd class="kr" id="from">친구<small id="fromHandle"></small></dd></dl>
@@ -249,10 +249,9 @@
         <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
       </div>
       <div class="face back" aria-hidden="true">
-        <div class="bloom"><i id="bl0"></i><i id="bl1"></i><i id="bl2"></i></div>
-        <svg class="press" viewBox="0 0 370 134"><defs><linearGradient id="pressFill" x1="0" y1="0" x2="1" y2="1"><stop id="pf0" offset="0"/><stop id="pf1" offset=".5"/><stop id="pf2" offset="1"/></linearGradient></defs><use href="#wm" fill="url(#pressFill)"/></svg>
+        <svg class="press" viewBox="0 0 370 134"><use id="pressMark" href="#wm"/></svg>
         <div class="top"><span class="k">Invitation_</span><span class="n" id="backNo" hidden></span></div>
-        <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
+        <div class="grain"></div>
       </div>
     </div>
   </div>
@@ -261,17 +260,17 @@
   <div class="noapp" id="noapp" hidden><b>아직 디토 앱이 없나 봐요.</b> 앱을 받은 다음 이 링크를 다시 열거나, 가입할 때 초대코드 <b id="noappCode">------</b>를 넣어 주세요.</div>
 
   <div class="actions">
-    <a class="btn" id="open" href="https://ditto.at/download/">디토 앱에서 열기 <span class="ar" aria-hidden="true">→</span></a>
+    <a class="btn" id="open" href="https://ditto.place/download/">디토 앱에서 열기 <span class="ar" aria-hidden="true">→</span></a>
     <button class="btn line" id="copy" type="button"><span id="copyLabel">초대코드 복사</span><span class="code" id="codeBtn">------</span></button>
   </div>
-  <p class="note" id="note">앱이 있으면 바로 열려요. 아직 없다면 <a href="https://ditto.at/download/">출시 알림 받기 →</a></p>
+  <p class="note" id="note">앱이 있으면 바로 열려요. 아직 없다면 <a href="https://ditto.place/download/">출시 알림 받기 →</a></p>
 
   <ol class="steps">
     <li><span class="n">1</span><span>디토 앱을 받고 열어요</span></li>
     <li><span class="n">2</span><span>가입할 때 <b>초대코드</b>를 넣어요</span></li>
     <li><span class="n">3</span><span id="step3">친구의 플래터에서 다시 만나요</span></li>
   </ol>
-  <p class="foot"><a href="https://ditto.at/">IYKYK Place_ ditto.at</a></p>
+  <p class="foot"><a href="https://ditto.place/">IYKYK Place_ ditto.place</a></p>
 </main>
 
 <script>
@@ -341,32 +340,32 @@
   // ── 링크 해석 ──
   var seg = location.pathname.split("/").filter(Boolean);
   var q = new URLSearchParams(location.search);
-  // 옛 프로필 링크 i.ditto.at/u/{handle} → ditto.at/{handle}
+  // 옛 프로필 링크 i.ditto.place/u/{handle} → ditto.place/{handle}
   if (seg[0] === "u" && seg[1]) {
     var uh = decodeURIComponent(seg[1]).replace(/^@/, "");
-    location.replace(/^[A-Za-z0-9_.]{1,30}$/.test(uh) ? "https://ditto.at/" + uh.toLowerCase() : "https://ditto.at/");
+    location.replace(/^[A-Za-z0-9_.]{1,30}$/.test(uh) ? "https://ditto.place/" + uh.toLowerCase() : "https://ditto.place/");
     return;
   }
   var demo = location.protocol === "file:" || q.has("demo") || /\/design\/invite-card/.test(location.pathname);
   var code = /^[A-Za-z0-9]{6}$/.test(seg[0] || "") ? seg[0].toUpperCase() : (demo ? (q.get("code") || "7K2QXA").toUpperCase() : null);
-  if (!code) { location.replace("https://ditto.at/"); return; }
+  if (!code) { location.replace("https://ditto.place/"); return; }
   var handleQ = (q.get("h") || "").replace(/^@/, "");
   if (!/^[A-Za-z0-9_.]{1,30}$/.test(handleQ)) handleQ = "";
   var current = PALETTES[q.get("p")] ? q.get("p") : "purple-pink";
 
-  // [디토 앱에서 열기] — 다른 도메인(ditto.at)의 유니버설 링크로 앱을 연다. 앱이 없으면 ditto.at이 ?noapp=1로 돌려보낸다.
+  // [디토 앱에서 열기] — 다른 도메인(ditto.place)의 유니버설 링크로 앱을 연다. 앱이 없으면 ditto.place이 ?noapp=1로 돌려보낸다.
   function openHref() {
     var qs = new URLSearchParams();
     if (handleQ) qs.set("h", handleQ);
     qs.set("p", current);
-    return "https://ditto.at/i/" + code + "?" + qs.toString();
+    return "https://ditto.place/i/" + code + "?" + qs.toString();
   }
   var isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   var noApp = q.get("noapp") === "1";
   if (noApp) {
     $("noapp").hidden = false; $("noappCode").textContent = code;
     $("open").firstChild.nodeValue = "디토 앱 받기 ";
-    $("open").href = "https://ditto.at/download/";
+    $("open").href = "https://ditto.place/download/";
     $("note").innerHTML = '앱을 받은 뒤엔 이 링크에서 <a id="retry" href="#">디토 앱에서 열기 →</a>';
   } else if (!isIOS && !demo) {
     $("note").textContent = "디토는 iPhone 앱이에요. iPhone에서 이 링크를 열면 앱으로 바로 이어져요.";
@@ -385,12 +384,16 @@
   var mi = parseInt(q.get("m"), 10);
   $("msg").textContent = MESSAGES[mi >= 0 && mi < MESSAGES.length ? mi : 0];
   // 발급 번호 — 초대장이 발급된 순서 (invite_card_no). 모르면 감춘다
-  function showNo(n) { if (n > 0) { $("backNo").textContent = "No. " + (n < 10000 ? String(n).padStart(4, "0") : n); $("backNo").hidden = false; } }
-  // 뒷면 — 키 컬러를 종이에 번지게, 워드마크엔 흰빛에 섞어서
+  function showNo(n) {
+    if (!(n > 0)) return;
+    var t = n < 10000 ? String(n).padStart(4, "0") : String(n);
+    $("backNo").textContent = "No. " + t; $("backNo").hidden = false;
+    $("serialNo").textContent = t; $("serial").hidden = false;   // 앞면 각인
+  }
+  // 뒷면 — 그라데이션 없이 키 컬러 단색 워드마크 (2026-10-12 · 앱 InviteTicketBack과 같음)
   (function () {
-    var p = PALETTES[current], mixW = function (h, t) { var r = parseInt(h.slice(1, 3), 16), g = parseInt(h.slice(3, 5), 16), b = parseInt(h.slice(5, 7), 16); return "rgb(" + [r, g, b].map(function (c) { return Math.round(c + (255 - c) * t); }).join(",") + ")"; };
-    for (var k = 0; k < 3; k++) { $("bl" + k).style.background = p.colors[k]; }
-    $("pf0").setAttribute("stop-color", mixW(p.colors[0], .62)); $("pf1").setAttribute("stop-color", mixW(p.colors[2], .58)); $("pf2").setAttribute("stop-color", mixW(p.colors[1], .62));
+    var p = PALETTES[current];
+    $("pressMark").setAttribute("fill", p.colors[0]);
     var d = darkest(p.colors), r = parseInt(d.slice(1, 3), 16), g = parseInt(d.slice(3, 5), 16), b = parseInt(d.slice(5, 7), 16);
     $("card").style.setProperty("--shade", "rgba(" + r + "," + g + "," + b + ",.28)");
   })();

@@ -4,6 +4,10 @@
       {
         "appIDs": ["3K5K5Q6WGY.com.ditto.DittoPrototype"],
         "components": [
+          { "/": "/", "exclude": true },
+          { "/": "/*.png", "exclude": true },
+          { "/": "/*.svg", "exclude": true },
+          { "/": "/u/*" },
           { "/": "/*" }
         ]
       }
