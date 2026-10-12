@@ -103,8 +103,6 @@
   .front { display: flex; }
   .graphic { position: relative; width: 60%; height: 100%; overflow: hidden; }
   .graphic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  #gNext { clip-path: inset(0 100% 0 0); }
-  #gNext.wipe { transition: clip-path .75s cubic-bezier(.65, 0, .35, 1); clip-path: inset(0 0 0 0); }
   .graphic::after { content: ""; position: absolute; top: 0; bottom: 0; right: 0; border-right: .35cqw dashed rgba(255,255,255,.7); }
   .flow { transform-box: view-box; transform-origin: 50% 50%; }
   @media (prefers-reduced-motion: no-preference) {
@@ -117,23 +115,24 @@
   @keyframes flow1 { from { transform: translate(2%, -2%) scale(.985, 1.025); } to { transform: translate(-2.2%, 2.5%) scale(1.025, .98); } }
   @keyframes flow2 { from { transform: translate(-2.5%, 1.8%) scale(1.02, .985); } to { transform: translate(2.5%, -2.8%) scale(.99, 1.03); } }
 
-  .stub { flex: 1; display: flex; flex-direction: column; text-align: left; padding: 4.6cqw 3.8cqw 4cqw 4cqw; color: var(--ink); min-width: 0; }
-  .stub .wm { width: 17cqw; height: auto; display: block; color: var(--ink); }
+  .stub { flex: 1; display: flex; flex-direction: column; text-align: left; padding: 4.8cqw 4.4cqw 4.4cqw 4.4cqw; color: var(--ink); min-width: 0; }
   .avatar {
-    margin-top: 3cqw; width: 13cqw; height: 13cqw; border-radius: 3.2cqw; overflow: hidden; flex: none;
+    width: 14cqw; height: 14cqw; border-radius: 3.6cqw; overflow: hidden; flex: none;
     display: flex; align-items: flex-end; justify-content: center; background: linear-gradient(180deg, #CAB7F2, #B092ED);
     box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.8), 0 .6cqw 2.4cqw rgba(90,20,120,.18);
   }
   .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .avatar svg { width: 72%; height: 72%; fill: rgba(255,255,255,.92); }
-  .rows { margin-top: auto; display: flex; flex-direction: column; gap: 1.3cqw; }
-  .row dt { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.5cqw; color: var(--violet); line-height: 1.2; }
-  .row dd { font-size: 3.9cqw; line-height: 1.2; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row dd.kr { font-size: 4.2cqw; letter-spacing: -.02em; }
-  .row dd small { display: block; font-size: 2.8cqw; font-weight: 500; color: #6B6475; letter-spacing: 0; }
+   /* 프로필 묶음(사진 → From)을 위에, 기록 묶음(Sent · Code · 바코드)을 아래에 — 두 묶음 사이만 넓게 */
+  .who { margin-top: 2.6cqw; }
+  .rows { margin-top: auto; padding-top: 1.6cqw; display: flex; flex-direction: column; gap: 1.2cqw; }
+  .row dt { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.5cqw; color: var(--violet); line-height: 1.2; margin-bottom: .4cqw; }
+  .row dd { font-size: 3.6cqw; line-height: 1.2; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row dd.kr { font-size: 4.4cqw; letter-spacing: -.02em; }
+  .row dd small { display: block; margin-top: .3cqw; font-size: 2.8cqw; font-weight: 500; color: #6B6475; letter-spacing: 0; }
   .row dd.code { font-family: var(--round); font-style: normal; font-weight: 800; letter-spacing: .06em; }
   .row dd.date { font-family: var(--round); font-weight: 800; }
-  .barcode { margin-top: 2.6cqw; width: 100%; height: 7cqw; display: block; }
+  .barcode { margin-top: 2.2cqw; width: 100%; height: 6.4cqw; display: block; }
 
   .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
@@ -154,13 +153,6 @@
 
   .hint { margin-top: 16px; font-size: 13px; color: var(--ink-3); }
 
-  /* 그래픽 고르기 — 작은 앱 아이콘 */
-  .swatches { margin-top: 14px; display: flex; gap: 8px; justify-content: center; }
-  .sw { width: 46px; height: 46px; padding: 3px; border: 2px solid transparent; border-radius: 14px; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .2s var(--ease); }
-  .sw:active { transform: scale(.92); }
-  .sw svg { width: 100%; height: 100%; display: block; border-radius: 10px; }
-  .sw[aria-pressed="true"] { border-color: var(--violet); }
-  .sw:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
   /* 행동 — ditto.at 버튼 */
   .actions { width: 100%; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
@@ -197,7 +189,7 @@
   html.og .page { max-width: none; height: 100svh; justify-content: center; padding: 0; }
   html.og .stage { width: 600px; margin: 0; }
 
-  @media (prefers-reduced-motion: reduce) { .card, .card.live, #gNext.wipe { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .card, .card.live { transition: none; } }
 </style>
 </head>
 <body>
@@ -231,12 +223,11 @@
   <div class="stage" id="stage">
     <div class="card" id="card" role="button" tabindex="0" aria-label="초대장 — 눌러서 뒤집기">
       <div class="face front">
-        <div class="graphic" aria-hidden="true"><svg id="g"></svg><svg id="gNext"></svg></div>
+        <div class="graphic" aria-hidden="true"><svg id="g"></svg></div>
         <div class="stub">
-          <svg class="wm" viewBox="0 0 370 134" role="img" aria-label="ditto!"><use href="#wm"/></svg>
           <div class="avatar" id="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5a5.2 5.2 0 1 1 0 10.4 5.2 5.2 0 0 1 0-10.4ZM3.5 22c.5-4.3 4-7 8.5-7s8 2.7 8.5 7Z"/></svg></div>
+          <dl class="row who"><dt>From</dt><dd class="kr" id="from">친구<small id="fromHandle"></small></dd></dl>
           <dl class="rows">
-            <div class="row"><dt>From</dt><dd class="kr" id="from">친구<small id="fromHandle"></small></dd></div>
             <div class="row"><dt>Sent</dt><dd class="date" id="sent">—</dd></div>
             <div class="row"><dt>Code</dt><dd class="code" id="codeOnCard">------</dd></div>
           </dl>
@@ -253,7 +244,6 @@
     </div>
   </div>
   <p class="hint" id="hint">카드를 눌러 뒷면을 봐요</p>
-  <div class="swatches" id="swatches" role="group" aria-label="그래픽 고르기"></div>
 
   <div class="noapp" id="noapp" hidden><b>아직 디토 앱이 없나 봐요.</b> 앱을 받은 다음 이 링크를 다시 열거나, 가입할 때 초대코드 <b id="noappCode">------</b>를 넣어 주세요.</div>
 
@@ -295,6 +285,9 @@
   var VEIL = [[0, .34], [.24, .12], [.62, 0], [1, .01]];
   var serial = 0;
 
+  /** 계열에서 가장 진한 색 — 로고 그늘·그림자 (앱 InvitePainting.shade와 같은 규칙) */
+  function darkest(cs) { return cs.slice().sort(function (a, b) { return lum(a) - lum(b); })[0]; }
+  function lum(h) { var r = parseInt(h.slice(1, 3), 16), g = parseInt(h.slice(3, 5), 16), b = parseInt(h.slice(5, 7), 16); return .2126 * r + .7152 * g + .0722 * b; }
   /** 은은한 빛 표면을 svg에 그린다. W×H 좌표, 로고는 짧은 변의 logo배 */
   function drawGlow(svg, key, W, H, logo, flow) {
     var p = PALETTES[key] || PALETTES["purple-pink"], id = "gl" + (++serial), s = Math.min(W, H), o = .3;
@@ -307,7 +300,21 @@
         FALLOFF.map(function (x) { return '<stop offset="' + x[0] + '" stop-color="' + p.colors[j] + '" stop-opacity="' + x[1] + '"/>'; }).join("") + "</radialGradient>";
       fields += '<g class="flow' + (flow ? " f" + j : "") + '"><rect x="' + (-o * W) + '" y="' + (-o * H) + '" width="' + W * (1 + 2 * o) + '" height="' + H * (1 + 2 * o) + '" fill="url(#' + id + "c" + j + ')" opacity="' + f.o + '"/></g>';
     });
-    var L = s * logo;
+    var L = s * logo, tint = darkest(p.colors), tr = parseInt(tint.slice(1, 3), 16) / 255, tg = parseInt(tint.slice(3, 5), 16) / 255, tb = parseInt(tint.slice(5, 7), 16) / 255;
+    // 로고 입체 질감 — 모양(알파)을 높이로 보고 빛을 받는다 (앱 DittoMark3D와 같은 구성: 몸체 · 계열 색 그늘 · 반사광 · 바닥 그림자)
+    defs += '<linearGradient id="' + id + 'mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#FBF6FF"/><stop offset="1" stop-color="#EFE3FF"/></linearGradient>' +
+      '<filter id="' + id + 'm" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">' +
+        '<feGaussianBlur in="SourceAlpha" stdDeviation="' + L * .03 + '" result="h"/>' +
+        '<feDiffuseLighting in="h" surfaceScale="' + L * .06 + '" diffuseConstant="1.1" lighting-color="#fff" result="d"><feDistantLight class="lt" azimuth="235" elevation="52"/></feDiffuseLighting>' +
+        '<feColorMatrix in="d" type="matrix" values="0 0 0 0 ' + tr + '  0 0 0 0 ' + tg + '  0 0 0 0 ' + tb + '  -1.15 0 0 0 1.02" result="shade"/>' +
+        '<feComposite in="shade" in2="SourceGraphic" operator="over" result="body"/>' +
+        '<feSpecularLighting in="h" surfaceScale="' + L * .06 + '" specularConstant="1.1" specularExponent="26" lighting-color="#fff" result="sp"><feDistantLight class="lt" azimuth="235" elevation="58"/></feSpecularLighting>' +
+        '<feComposite in="body" in2="sp" operator="arithmetic" k2="1" k3=".85" result="lit"/>' +
+        '<feComposite in="lit" in2="SourceAlpha" operator="in" result="mark"/>' +
+        '<feGaussianBlur in="SourceAlpha" stdDeviation="' + L * .035 + '" result="sb"/><feOffset in="sb" dy="' + L * .035 + '" result="so"/>' +
+        '<feFlood flood-color="' + tint + '" flood-opacity=".55"/><feComposite in2="so" operator="in" result="drop"/>' +
+        '<feMerge><feMergeNode in="drop"/><feMergeNode in="mark"/></feMerge>' +
+      '</filter>';
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
     svg.innerHTML = "<defs>" + defs + "</defs>" +
@@ -315,7 +322,7 @@
       '<g filter="url(#' + id + 'b)">' + fields + "</g>" +
       '<rect width="' + W + '" height="' + H + '" fill="url(#' + id + 'v)"/>' +
       '<rect width="' + W + '" height="' + H + '" fill="none" stroke="#fff" stroke-width="' + (s * 26 / 240) + '" opacity=".68" filter="url(#' + id + 'r)"/>' +
-      '<use href="#mk" x="' + (W - L) / 2 + '" y="' + (H - L) / 2 + '" width="' + L + '" height="' + L + '" fill="#fff"/>';
+      '<g filter="url(#' + id + 'm)"><use href="#mk" x="' + (W - L) / 2 + '" y="' + (H - L) / 2 + '" width="' + L + '" height="' + L + '" fill="url(#' + id + 'mg)"/></g>';
   }
 
   // ── Code128-B (실제로 찍힌다: i.ditto.at/{코드}) ──
@@ -399,33 +406,16 @@
   // ── 그래픽 + 고르기 (바꾸면 옆으로 쓸려 넘어간다) ──
   var GW = 300, GH = 333;
   drawGlow($("g"), current, GW, GH, .42, !reduce);
-  function buildSwatches() {
-    var box = $("swatches"); box.innerHTML = "";
-    ORDER.forEach(function (key) {
-      var b = document.createElement("button");
-      b.className = "sw"; b.type = "button"; b.title = PALETTES[key].name;
-      b.setAttribute("aria-label", "그래픽 " + PALETTES[key].name); b.setAttribute("aria-pressed", key === current ? "true" : "false");
-      var s = document.createElementNS(NS, "svg"); drawGlow(s, key, 100, 100, .5, false); b.appendChild(s);
-      b.addEventListener("click", function () { choose(key); });
-      box.appendChild(b);
-    });
-  }
-  var wiping = false;
-  function choose(key) {
-    if (key === current || wiping) return;
-    current = key; buildSwatches(); syncOpen();
-    var next = $("gNext");
-    if (reduce) { drawGlow($("g"), key, GW, GH, .42, false); return; }
-    drawGlow(next, key, GW, GH, .42, false);
-    wiping = true; next.classList.remove("wipe"); void next.getBoundingClientRect(); next.classList.add("wipe");
-    setTimeout(function () { drawGlow($("g"), key, GW, GH, .42, true); next.classList.remove("wipe"); next.innerHTML = ""; wiping = false; }, 780);
-  }
-  buildSwatches(); syncOpen();
+  syncOpen();
 
   // ── 기울이기 · 뒤집기 ──
   var card = $("card"), stage = $("stage"), flipped = false, down = null, moved = false, idle = !reduce, t0 = performance.now();
+  // 로고가 받는 빛 — 카드가 기울면 빛의 방향(azimuth)이 따라 돈다
+  var lights = [].slice.call(document.querySelectorAll("#g .lt"));
+  function aimLight(rx, ry) { var az = 235 + ry * 4 - rx * 4; lights.forEach(function (l) { l.setAttribute("azimuth", az); }); }
   function apply(rx, ry, lx, ly, live) {
     card.classList.toggle("live", !!live);
+    aimLight(rx, ry);
     card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
     var gx = flipped ? 100 - lx : lx;
     card.style.setProperty("--gx", gx + "%"); card.style.setProperty("--gy", ly + "%");
@@ -463,6 +453,7 @@
     var t = (now - t0) / 1000, ry = Math.sin(t * .7) * 7, rx = Math.sin(t * .9 + 1) * 4;
     card.classList.add("live");
     card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
+    aimLight(rx, ry);
     card.style.setProperty("--gx", (50 + ry * 5) + "%"); card.style.setProperty("--gy", (30 - rx * 4) + "%"); card.style.setProperty("--px", (50 - ry * 5) + "%");
     requestAnimationFrame(sway);
   }
