@@ -5,199 +5,204 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ditto! 초대장</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="위젯으로 서로의 하루를 주고받는 친구들의 공간">
+<meta name="description" content="친한 친구 15명만 들어오는 방, Ditto!에 초대받았어요.">
+<meta name="theme-color" content="#C07FE6">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ditto! 초대장">
-<meta property="og:description" content="친구가 ditto!에 초대했어요 — 위젯으로 서로의 하루를 주고받는 친구들의 공간">
+<meta property="og:site_name" content="ditto!">
+<meta property="og:title" content="ditto! 초대장이 도착했어요">
+<meta property="og:description" content="친한 친구 15명만 들어오는 방. 초대코드로 들어오면 바로 친구가 돼요.">
 <meta property="og:image" content="https://i.ditto.at/og-invite.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.ditto.at/og-invite.png">
+<link rel="icon" href="https://ditto.at/favicon.ico">
+<link rel="apple-touch-icon" href="https://ditto.at/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,700;1,800;1,900&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <!--
-  ditto! 초대장 (2026-10-12)
-  레퍼런스: 가로 티켓 — 왼쪽 그림 · 오른쪽 스텁(워드마크·사진·핸들·날짜·실제로 찍히는 바코드), 뒷면엔 워드마크 눌림.
-  기울이면 빛이 종이 위를 지나가고, 누르면 뒤집히고, 그림을 바꾸면 옆으로 쓸려 넘어간다.
-  디토로 옮긴 것:
-    · 그림 = '주파수' 동심원. 색은 브랜드 v3 코어(Splup #AA4AF4 · Deep #6655D2 · Platter Pink #FA97E2 · night 램프 · 액센트)
-      + 보낸 사람의 핸들 색(profiles.handle_color). 보낸 사람이 앱에서 고른 그림이 링크(?p=)로 그대로 온다.
-    · 스텁 = 워드마크 · 보낸 사람 사진 · FROM / SENT / CODE · i.ditto.at/{코드} Code128 바코드.
-    · 앱(InviteTicket.swift)과 같은 규칙으로 그린다 — 값을 바꾸면 두 곳 모두 바꾼다.
-  링크: i.ditto.at/{6자 코드}?h={handle}&p={그림} — h·p는 선택. 코드는 invite_owner()로 보낸 사람 이름을 확인한다.
+  ditto! 초대장 · i.ditto.at/{6자 코드}?h={보낸 사람 계정}&p={그래픽} (2026-10-12 · v2)
+  · 무드 = ditto.at 히어로 그대로: 퍼플→핑크→화이트 하늘, 떠다니는 빛 두 덩이, Nunito 이탤릭 아이브로, 검정 알약 버튼 + 유리 알약 버튼.
+  · 카드 그래픽 = 디자인 시스템 '앱 아이콘 · 은은한 빛' (brand.fluidPalettes · brand.appIcon) + 흰 디토 로고. 6계열.
+  · 사진 = 보낸 사람의 프로필 사진 (profiles.avatar_url, 이름이 invite_owner와 같을 때만).
+  · [디토 앱에서 열기] = ditto.at/i/{코드}… — 같은 도메인 링크는 유니버설 링크가 열리지 않아 도메인을 바꿔 연다.
+    앱이 있으면 앱이 열리고(초대한 친구에게 친구 신청 · 가입 전이면 코드 보관), 없으면 ditto.at이 ?noapp=1을 붙여 여기로 돌려보낸다.
+  · 앱(DittoPrototype/Views/InviteTicket.swift)과 같은 값으로 그린다 — 바꾸면 두 곳 모두.
 -->
 <style>
   :root {
-    --bg: #F4F9FF;            /* Bright White 11-0601 */
-    --ink: #171719;
-    --ink-2: #5C5C66;
-    --ink-3: #9A9AA4;
-    --brand: #AA4AF4;         /* Splup Purple */
-    --brand-ink: #7E37C2;
-    --brand-soft: #F1E6FD;
-    --stock: #FBFAF7;         /* 카드 종이 */
-    --stock-back: #F6F3FA;
-    --line: rgba(23, 23, 25, .08);
-    --shadow: 0 30px 60px -20px rgba(45, 0, 128, .35), 0 12px 24px -12px rgba(23, 23, 25, .25);
-    --cta: linear-gradient(135deg, #B9A9FA 0%, #9A36F0 55%, #920CB3 100%);  /* Splup Gradient */
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #1C1D24; --ink: #F4F9FF; --ink-2: #B9BAC6; --ink-3: #7D7E8A;
-      --brand-ink: #CFA3FA; --brand-soft: rgba(170, 74, 244, .16); --line: rgba(244, 249, 255, .1);
-      --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 12px 24px -12px rgba(0, 0, 0, .6);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #1C1D24; --ink: #F4F9FF; --ink-2: #B9BAC6; --ink-3: #7D7E8A;
-    --brand-ink: #CFA3FA; --brand-soft: rgba(170, 74, 244, .16); --line: rgba(244, 249, 255, .1);
-    --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 12px 24px -12px rgba(0, 0, 0, .6);
+    --ink: #16121B; --ink-2: #4A4352; --ink-3: #8A8292;
+    --violet: #AA4AF4; --violet-d: #8A3FB8; --night: #161616;
+    --round: "Nunito", "Arial Rounded MT Bold", system-ui, sans-serif;
+    --kr: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --stock: #FBFAF7; --stock-back: #F6F3FA;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   [hidden] { display: none !important; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; color-scheme: light; }
   body {
-    background: var(--bg); color: var(--ink);
-    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-    min-height: 100svh; overflow-x: hidden;
+    min-height: 100svh; overflow-x: hidden; overflow-x: clip;
+    font-family: var(--kr); color: var(--ink); letter-spacing: -.01em; word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    /* ditto.at 히어로 하늘 */
+    background:
+      radial-gradient(58% 34% at 12% 4%, rgba(180,108,224,.95), rgba(180,108,224,0) 70%),
+      radial-gradient(52% 32% at 90% 7%, rgba(224,135,230,.95), rgba(224,135,230,0) 70%),
+      radial-gradient(70% 34% at 50% 40%, rgba(247,159,223,.85), rgba(247,159,223,0) 72%),
+      linear-gradient(180deg, #C07FE6 0%, #EE9FE3 30%, #FBD3EE 55%, #FFFFFF 78%) #FFFFFF;
+    background-repeat: no-repeat;
   }
-  .mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; }
+  .blob { position: fixed; z-index: -1; border-radius: 50%; filter: blur(50px); pointer-events: none; }
+  .b1 { width: 70vw; height: 70vw; max-width: 520px; max-height: 520px; left: -18vw; top: 12%; background: radial-gradient(closest-side, rgba(226,220,255,.85), rgba(226,220,255,0)); }
+  .b2 { width: 60vw; height: 60vw; max-width: 460px; max-height: 460px; right: -14vw; top: 22%; background: radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,0)); }
+  @media (prefers-reduced-motion: no-preference) {
+    .b1 { animation: fl1 16s ease-in-out infinite alternate; }
+    .b2 { animation: fl2 19s ease-in-out infinite alternate; }
+  }
+  @keyframes fl1 { to { transform: translate(18vw, 8vh) scale(1.1); } }
+  @keyframes fl2 { to { transform: translate(-14vw, 12vh) scale(.92); } }
 
-  .page {
-    max-width: 480px; margin: 0 auto;
-    padding: calc(40px + env(safe-area-inset-top, 0px)) 16px calc(40px + env(safe-area-inset-bottom, 0px));
-    display: flex; flex-direction: column; align-items: center; text-align: center;
+  /* 상단 유리 알약 — ditto.at GNB */
+  .gnb {
+    position: sticky; top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 20;
+    width: min(calc(100% - 32px), 560px); height: 56px; margin: 12px auto 0;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 20px; border-radius: 999px;
+    background: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.55);
+    -webkit-backdrop-filter: blur(22px) saturate(1.4); backdrop-filter: blur(22px) saturate(1.4);
+    box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 8px 24px -14px rgba(90,20,120,.25);
   }
-  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-  h1 { margin-top: 10px; font-size: 24px; line-height: 1.35; font-weight: 700; word-break: keep-all; }
-  .sub { margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--ink-2); word-break: keep-all; }
+  .gnb .wm { height: 22px; width: auto; color: var(--ink); display: block; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px; border-radius: 999px;
+    background: linear-gradient(135deg, #AA4AF4, #8A3FB8); color: #fff; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: -.02em;
+    box-shadow: 0 6px 16px -8px rgba(110,30,170,.7), inset 0 1px 0 rgba(255,255,255,.3);
+  }
 
-  /* ── 카드 ─────────────────────────────────────────────── */
-  .stage {
-    width: 100%; margin-top: 32px; perspective: 1100px;
-    touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
-  }
-  .card {
-    position: relative; width: 100%; aspect-ratio: 3 / 2; container-type: inline-size;
-    transform-style: preserve-3d; cursor: pointer;
-    transition: transform .7s cubic-bezier(.2, .8, .2, 1);
-  }
+  .page { max-width: 480px; margin: 0 auto; padding: 36px 16px calc(48px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .eyebrow { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 18px; line-height: 1.3; color: var(--violet-d); }
+  .eyebrow .cur { display: inline-block; width: .5ch; }
+  @media (prefers-reduced-motion: no-preference) { .eyebrow .cur { animation: blink 1s steps(1) infinite; } }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { margin-top: 10px; font-size: 30px; font-weight: 700; letter-spacing: -.035em; line-height: 1.24; }
+  .lead { margin-top: 12px; font-size: 15px; line-height: 1.7; color: #3E3446; }
+
+  /* ── 카드 ─────────────────────────────────────── */
+  .stage { width: 100%; margin-top: 28px; perspective: 1100px; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .card { position: relative; width: 100%; aspect-ratio: 3 / 2; container-type: inline-size; transform-style: preserve-3d; cursor: pointer; transition: transform .7s cubic-bezier(.2, .8, .2, 1); }
   .card.live { transition: transform .12s ease-out; }
   .face {
-    position: absolute; inset: 0; border-radius: 3.4cqw; overflow: hidden;
-    backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    box-shadow: var(--shadow); background: var(--stock);
+    position: absolute; inset: 0; border-radius: 4cqw; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: var(--stock);
+    box-shadow: 0 30px 60px -22px rgba(90,20,120,.45), 0 12px 24px -12px rgba(22,18,27,.18);
   }
   .back { transform: rotateY(180deg); background: var(--stock-back); }
-
   .front { display: flex; }
-  .painting { position: relative; width: 62%; height: 100%; overflow: hidden; background: #E9E1F7; }
-  .painting canvas {
-    position: absolute; inset: -6%; width: 112%; height: 112%;
-    filter: blur(.75cqw) saturate(1.1);
+  .graphic { position: relative; width: 60%; height: 100%; overflow: hidden; }
+  .graphic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #gNext { clip-path: inset(0 100% 0 0); }
+  #gNext.wipe { transition: clip-path .75s cubic-bezier(.65, 0, .35, 1); clip-path: inset(0 0 0 0); }
+  .graphic::after { content: ""; position: absolute; top: 0; bottom: 0; right: 0; border-right: .35cqw dashed rgba(255,255,255,.7); }
+  .flow { transform-box: view-box; transform-origin: 50% 50%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .flow.f0 { animation: flow0 18s ease-in-out infinite alternate; }
+    .flow.f1 { animation: flow1 18s ease-in-out infinite alternate; }
+    .flow.f2 { animation: flow2 18s ease-in-out infinite alternate; }
   }
-  #paintNext { clip-path: inset(0 100% 0 0); }
-  #paintNext.wipe { transition: clip-path .75s cubic-bezier(.65, 0, .35, 1); clip-path: inset(0 0 0 0); }
-  /* 그림과 스텁 사이 — 절취선 */
-  .painting::after {
-    content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 0;
-    border-right: .35cqw dashed rgba(255, 255, 255, .55);
-  }
+  /* Fluid 규칙: 위치 변화 ≤ 3.5% · 크기 98–103% */
+  @keyframes flow0 { from { transform: translate(3.5%, 2.5%) scale(1.03, .98); } to { transform: translate(-2%, -1.2%) scale(.98, 1.025); } }
+  @keyframes flow1 { from { transform: translate(2%, -2%) scale(.985, 1.025); } to { transform: translate(-2.2%, 2.5%) scale(1.025, .98); } }
+  @keyframes flow2 { from { transform: translate(-2.5%, 1.8%) scale(1.02, .985); } to { transform: translate(2.5%, -2.8%) scale(.99, 1.03); } }
 
-  .stub {
-    flex: 1; display: flex; flex-direction: column; text-align: left;
-    padding: 4.4cqw 3.6cqw 3.8cqw 3.8cqw; color: #171719;
-  }
-  .stub .wm { width: 16cqw; height: auto; color: #171719; }
+  .stub { flex: 1; display: flex; flex-direction: column; text-align: left; padding: 4.6cqw 3.8cqw 4cqw 4cqw; color: var(--ink); min-width: 0; }
+  .stub .wm { width: 17cqw; height: auto; display: block; color: var(--ink); }
   .avatar {
-    margin-top: 2.6cqw; width: 11cqw; height: 11cqw; border-radius: 2.6cqw; overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5.6cqw; font-weight: 700; color: #171719;
-    box-shadow: inset 0 0 0 .25cqw rgba(255, 255, 255, .7);
+    margin-top: 3cqw; width: 13cqw; height: 13cqw; border-radius: 3.2cqw; overflow: hidden; flex: none;
+    display: flex; align-items: flex-end; justify-content: center; background: linear-gradient(180deg, #CAB7F2, #B092ED);
+    box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.8), 0 .6cqw 2.4cqw rgba(90,20,120,.18);
   }
   .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .rows { margin-top: auto; display: flex; flex-direction: column; gap: 1.2cqw; }
-  .row dt { font-size: 2.3cqw; letter-spacing: .08em; color: #8A8A94; text-transform: uppercase; }
-  .row dd { margin-top: .2cqw; font-size: 4cqw; line-height: 1.15; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row dd small { display: block; font-size: 2.7cqw; font-weight: 500; color: #6B6B75; margin-top: .2cqw; }
-  .barcode { margin-top: 2.6cqw; width: 100%; height: 7.6cqw; display: block; }
+  .avatar svg { width: 72%; height: 72%; fill: rgba(255,255,255,.92); }
+  .rows { margin-top: auto; display: flex; flex-direction: column; gap: 1.3cqw; }
+  .row dt { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.5cqw; color: var(--violet); line-height: 1.2; }
+  .row dd { font-size: 3.9cqw; line-height: 1.2; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row dd.kr { font-size: 4.2cqw; letter-spacing: -.02em; }
+  .row dd small { display: block; font-size: 2.8cqw; font-weight: 500; color: #6B6475; letter-spacing: 0; }
+  .row dd.code { font-family: var(--round); font-style: normal; font-weight: 800; letter-spacing: .06em; }
+  .row dd.date { font-family: var(--round); font-weight: 800; }
+  .barcode { margin-top: 2.6cqw; width: 100%; height: 7cqw; display: block; }
 
-  /* 종이 결 · 진주빛 코팅 · 빛 */
-  .grain {
-    position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    background-size: 160px 160px;
-  }
-  .pearl {
-    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; opacity: .55;
-    background: linear-gradient(115deg, rgba(250,151,226,.0) 20%, rgba(250,151,226,.55) 38%, rgba(185,169,250,.6) 50%, rgba(72,181,244,.5) 62%, rgba(72,181,244,0) 80%);
-    background-size: 260% 260%; background-position: var(--px, 50%) var(--py, 50%);
-  }
-  .glare {
-    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
-    background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgba(255,255,255,.75), rgba(255,255,255,0) 46%);
-    opacity: var(--go, .5);
-  }
+  .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 160px 160px; }
+  .pearl { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; opacity: .5;
+    background: linear-gradient(115deg, rgba(250,151,226,0) 20%, rgba(250,151,226,.5) 38%, rgba(185,169,250,.55) 50%, rgba(72,181,244,.4) 62%, rgba(72,181,244,0) 80%);
+    background-size: 260% 260%; background-position: var(--px, 50%) var(--py, 50%); }
+  .glare { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
+    background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgba(255,255,255,.75), rgba(255,255,255,0) 46%); opacity: var(--go, .45); }
 
-  /* 뒷면 — 워드마크가 눌려 있다 */
-  .back { display: flex; flex-direction: column; justify-content: space-between; padding: 5cqw 5.4cqw; text-align: left; color: #171719; }
-  .back .top, .back .bottom { display: flex; justify-content: space-between; align-items: baseline; font-size: 2.2cqw; letter-spacing: .08em; color: #8A8A94; text-transform: uppercase; }
+  .back { display: flex; flex-direction: column; justify-content: space-between; padding: 5cqw 5.4cqw; text-align: left; }
+  .back .top, .back .bottom { display: flex; justify-content: space-between; align-items: baseline; }
+  .back .k { font-family: var(--round); font-style: italic; font-weight: 900; font-size: 2.8cqw; color: var(--violet); }
+  .back .n { font-family: var(--round); font-weight: 800; font-size: 2.6cqw; color: var(--ink-3); }
   .press { align-self: center; width: 54cqw; height: auto; color: var(--stock-back);
-    filter: drop-shadow(-.22cqw -.22cqw 0 rgba(255,255,255,.95)) drop-shadow(.25cqw .3cqw .25cqw rgba(45,0,128,.2)); }
-  .back .msg { font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif; font-size: 3.6cqw; font-weight: 600; letter-spacing: -.01em; text-transform: none; color: #171719; }
-  .back .url { text-transform: none; letter-spacing: .02em; }
+    filter: drop-shadow(-.22cqw -.22cqw 0 rgba(255,255,255,.95)) drop-shadow(.25cqw .3cqw .25cqw rgba(90,20,120,.2)); }
+  .back .msg { font-size: 3.8cqw; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
 
-  .hint { margin-top: 18px; font-size: 13px; color: var(--ink-3); }
+  .hint { margin-top: 16px; font-size: 13px; color: var(--ink-3); }
 
-  /* 그림 고르기 */
-  .swatches { margin-top: 18px; display: flex; gap: 10px; justify-content: center; }
-  .sw {
-    width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
-    position: relative; outline: none; -webkit-tap-highlight-color: transparent;
-    box-shadow: inset 0 0 0 1px rgba(23,23,25,.08);
-    transition: transform .2s ease;
-  }
+  /* 그래픽 고르기 — 작은 앱 아이콘 */
+  .swatches { margin-top: 14px; display: flex; gap: 8px; justify-content: center; }
+  .sw { width: 46px; height: 46px; padding: 3px; border: 2px solid transparent; border-radius: 14px; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .2s var(--ease); }
   .sw:active { transform: scale(.92); }
-  .sw[aria-pressed="true"]::after {
-    content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--brand);
-  }
-  .sw:focus-visible::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--ink); }
-  .sw-label { margin-top: 10px; font-size: 13px; color: var(--ink-2); min-height: 18px; }
+  .sw svg { width: 100%; height: 100%; display: block; border-radius: 10px; }
+  .sw[aria-pressed="true"] { border-color: var(--violet); }
+  .sw:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
-  /* 행동 */
+  /* 행동 — ditto.at 버튼 */
   .actions { width: 100%; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
-  .cta {
-    display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 16px;
-    background: var(--cta); color: #fff; font-size: 17px; font-weight: 700; text-decoration: none;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px -10px rgba(146,12,179,.6);
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 24px; border-radius: 999px; border: none;
+    background: var(--night); color: #fff; text-decoration: none; font-family: var(--kr); font-weight: 700; font-size: 17px; letter-spacing: -.02em; cursor: pointer;
+    transition: transform .4s var(--ease), background .3s ease;
   }
-  .cta:active { filter: brightness(.95); }
-  .copy {
-    min-height: 52px; border-radius: 16px; border: none; cursor: pointer; font-family: inherit;
-    background: var(--brand-soft); color: var(--brand-ink); font-size: 15px; font-weight: 600;
+  .btn:active { transform: scale(.98); }
+  .btn .ar { display: inline-block; transition: transform .4s var(--ease); }
+  @media (hover: hover) { .btn:hover { background: #000; transform: translateY(-2px); } .btn:hover .ar { transform: translateX(4px); } }
+  .btn.line { background: rgba(255,255,255,.66); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(22,18,27,.16); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+  @media (hover: hover) { .btn.line:hover { background: #fff; } }
+  .btn.line .code { font-family: var(--round); font-weight: 900; letter-spacing: .08em; color: var(--violet-d); }
+  .note { margin-top: 14px; font-size: 13px; line-height: 1.6; color: var(--ink-3); }
+  .note a { color: var(--violet-d); font-weight: 700; text-decoration: none; }
+  .noapp {
+    width: 100%; margin-top: 24px; padding: 14px 16px; border-radius: 16px; text-align: left; font-size: 14px; line-height: 1.55; color: var(--ink-2);
+    background: rgba(255,255,255,.72); box-shadow: inset 0 0 0 1px rgba(22,18,27,.08);
   }
-  .copy .mono { letter-spacing: .12em; margin-left: 6px; font-weight: 700; }
-  .note { margin-top: 12px; font-size: 13px; line-height: 1.55; color: var(--ink-3); word-break: keep-all; }
+  .noapp b { color: var(--ink); }
 
-  .steps { width: 100%; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); list-style: none; text-align: left; display: flex; flex-direction: column; gap: 12px; }
+  .steps { width: 100%; margin-top: 32px; padding: 20px; border-radius: 24px; list-style: none; text-align: left; display: flex; flex-direction: column; gap: 14px;
+    background: rgba(255,255,255,.66); box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 12px 32px -20px rgba(90,20,120,.35); }
   .steps li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
-  .steps .n { flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--brand-soft); color: var(--brand-ink); transform: translateY(-1px); }
-  .steps b { color: var(--ink); font-weight: 600; }
+  .steps .n { flex: none; font-family: var(--round); font-style: italic; font-weight: 900; font-size: 15px; color: var(--violet); width: 18px; }
+  .steps b { color: var(--ink); font-weight: 700; }
+  .foot { margin-top: 28px; font-family: var(--round); font-style: italic; font-weight: 800; font-size: 14px; color: var(--ink-3); }
+  .foot a { color: inherit; text-decoration: none; }
 
-  /* 링크 미리보기 이미지(og-invite.png) 촬영용 — ?og */
-  html.og body { background: linear-gradient(160deg, #F4F9FF 0%, #EDE4FB 100%); }
+  /* 링크 미리보기(og-invite.png) 촬영용 — ?og */
+  html.og body { background: radial-gradient(60% 70% at 15% 10%, rgba(180,108,224,.95), rgba(180,108,224,0) 70%), radial-gradient(55% 70% at 90% 15%, rgba(224,135,230,.95), rgba(224,135,230,0) 70%), linear-gradient(180deg, #C07FE6 0%, #EE9FE3 55%, #FBD3EE 100%); }
+  html.og .gnb, html.og .page > :not(.stage), html.og .blob { display: none !important; }
   html.og .page { max-width: none; height: 100svh; justify-content: center; padding: 0; }
-  html.og .page > :not(.stage) { display: none; }
-  html.og .stage { width: 640px; margin: 0; }
+  html.og .stage { width: 600px; margin: 0; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .card, .card.live, #paintNext.wipe { transition: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .card, .card.live, #gNext.wipe { transition: none; } }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="wm" viewBox="0 0 370 134"><g clip-path="url(#wmclip)">
+  <symbol id="wm" viewBox="0 0 370 134"><g >
 <path d="M140.496 15.9557C140.496 15.9557 120.588 0.280443 77.741 0C75.1142 15.1439 70.3181 40.5535 64.7177 70.738C62.9542 43.2029 47.0902 38.4354 38.4278 40.2214C16.9782 44.6568 -7.18676 84.0886 2.00698 112.362C11.2745 140.863 52.9341 134.251 70.0377 130.76C70.0082 130.672 69.986 130.583 69.9565 130.502C69.6392 101.808 73.2695 62.1993 99.2053 37.6974C110.709 26.8339 128.779 16.7749 140.503 15.9631L140.496 15.9557ZM53.3989 115.52C49.7982 119.454 41.7481 114.133 34.554 104.775C19.7673 85.5203 20.4609 63.941 31.1746 63.8081C36.9742 63.7343 42.6778 68.1255 48.7357 86.2288C52.3069 96.9077 55.5535 113.159 53.3916 115.52H53.3989Z" fill="currentColor"></path>
 <path d="M227.933 118.015C241.332 137.756 263.121 132.214 273.399 124.827C306.345 101.173 287.102 40.3986 240.579 40.3986C222.937 40.3986 214.083 53.3063 212.74 63.3284C225.121 65.7712 236.005 73.7417 240.454 80.9742C245.804 67.3063 250.909 63.7343 256.097 63.8008C266.81 63.941 267.083 87.2915 252.717 104.775C248.253 110.199 238.366 118.79 227.933 118.015Z" fill="currentColor"></path>
 <path d="M109.174 37.594C110.62 39.1586 152.811 54.1254 167.14 62.1845C186.693 73.1881 162.396 55.8228 162.396 55.8228L149.328 130.605H181.425L170.512 46.8929C175.338 49.5129 191.202 54.4944 204.852 48.797C222.775 39.5055 211.877 -0.819233 109.167 37.594H109.174Z" fill="currentColor"></path>
@@ -206,59 +211,64 @@
 <path d="M237.694 92.5239C230.242 78.1549 196.75 62.8856 168.033 60.214C164.735 59.9778 187.07 79.0184 202.262 91.5202L194.419 130.598H220.384L211.345 98.6346C221.461 109.653 234.809 110.915 238.056 104.605C239.635 101.542 240.218 97.3874 237.694 92.5239Z" fill="currentColor"></path>
 <path d="M322.297 93.6236C320.18 95.7491 317.066 95.9041 315.516 91.8081C314.653 89.5129 312.513 84.1698 306.906 76.9594C303.895 73.0849 298.228 67.2177 294.628 60.4059C290.769 53.107 290.009 48.9742 290.621 42.7823C291.425 34.7749 299.453 24.8782 310.639 25.5646C330.259 26.7675 328.791 52.3985 328.791 52.3985C328.791 52.3985 340.427 27.9852 359.087 35.9779C369.366 40.3838 371.498 53.4686 369.1 60.4059C364.392 74.0148 346.942 79.3579 340.272 82.5683C330.222 87.3948 327.462 88.4428 322.29 93.6236H322.297Z" fill="currentColor"></path>
 <path d="M312.44 131.55C319.775 131.55 325.721 125.602 325.721 118.266C325.721 110.929 319.775 104.982 312.44 104.982C305.105 104.982 299.158 110.929 299.158 118.266C299.158 125.602 305.105 131.55 312.44 131.55Z" fill="currentColor"></path>
-</g>
-<defs>
-<clipPath id="wmclip">
-<rect width="370" height="134" fill="currentColor"></rect>
-</clipPath>
-</defs></symbol>
+</g></symbol>
+  <symbol id="mk" viewBox="0 0 27 27"><path d="M22.4989 2.5898C22.4989 2.5898 19.3108 0.045519 12.4493 0C12.0287 2.45803 11.2606 6.5823 10.3638 11.4816C10.0814 7.01233 7.54098 6.2385 6.15379 6.52839C2.71889 7.24831 -1.15083 13.6485 0.321433 18.2376C1.80552 22.8638 8.47681 21.7905 11.2157 21.2239C11.211 21.2095 11.2075 21.1952 11.2027 21.1819C11.1519 16.5247 11.7333 10.0957 15.8866 6.11872C17.7286 4.35546 20.6225 2.72276 22.5 2.59099L22.4989 2.5898ZM8.55124 18.7503C7.97463 19.3887 6.6855 18.525 5.53344 17.0061C3.16553 13.8809 3.2766 10.3784 4.99228 10.3568C5.92102 10.3448 6.83439 11.0575 7.80448 13.9959C8.37638 15.7292 8.89626 18.367 8.55007 18.7503H8.55124Z"/>
+<path d="M19.3565 20.0126C19.0172 20.3564 18.5182 20.3815 18.2698 19.719C18.1315 19.3478 17.7886 18.4837 16.89 17.3175C16.4075 16.6909 15.4994 15.742 14.9223 14.6403C14.304 13.4598 14.1821 12.7915 14.2803 11.7901C14.4092 10.4951 15.6957 8.89446 17.4883 9.00547C20.6324 9.20002 20.3971 13.3454 20.3971 13.3454C20.3971 13.3454 22.2618 9.39696 25.2522 10.6896C26.8993 11.4022 27.2411 13.5184 26.8568 14.6403C26.1024 16.8413 23.3059 17.7055 22.2369 18.2247C20.6264 19.0053 20.1843 19.1748 19.3554 20.0126H19.3565Z"/>
+<path d="M18 26.25C19.2426 26.25 20.25 25.2426 20.25 24.0001C20.25 22.7574 19.2426 21.75 18 21.75C16.7574 21.75 15.75 22.7574 15.75 24.0001C15.75 25.2426 16.7574 26.25 18 26.25Z"/></symbol>
 </svg>
+<span class="blob b1" aria-hidden="true"></span><span class="blob b2" aria-hidden="true"></span>
 
-<main class="page" id="invite">
-  <p class="eyebrow mono">ditto! invitation</p>
-  <h1 id="headline">친구가 ditto!에 초대했어요</h1>
-  <p class="sub">위젯으로 서로의 하루를 주고받는 친구들의 공간</p>
+<header class="gnb">
+  <a href="https://ditto.at/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm"/></svg></a>
+  <a class="pill" id="getApp" href="https://ditto.at/download/">앱 받기</a>
+</header>
+
+<main class="page">
+  <p class="eyebrow">You're invited<span class="cur">_</span></p>
+  <h1 id="headline">친구의 방에<br>초대받았어요.</h1>
+  <p class="lead">Ditto!는 친한 친구 15명만 들어오는 방이에요.<br>초대코드로 들어오면 바로 친구가 돼요.</p>
 
   <div class="stage" id="stage">
     <div class="card" id="card" role="button" tabindex="0" aria-label="초대장 — 눌러서 뒤집기">
       <div class="face front">
-        <div class="painting" aria-hidden="true"><canvas id="paint"></canvas><canvas id="paintNext"></canvas></div>
+        <div class="graphic" aria-hidden="true"><svg id="g"></svg><svg id="gNext"></svg></div>
         <div class="stub">
           <svg class="wm" viewBox="0 0 370 134" role="img" aria-label="ditto!"><use href="#wm"/></svg>
-          <div class="avatar" id="avatar" aria-hidden="true"></div>
+          <div class="avatar" id="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5a5.2 5.2 0 1 1 0 10.4 5.2 5.2 0 0 1 0-10.4ZM3.5 22c.5-4.3 4-7 8.5-7s8 2.7 8.5 7Z"/></svg></div>
           <dl class="rows">
-            <div class="row"><dt class="mono">From</dt><dd id="from">친구<small id="fromHandle"></small></dd></div>
-            <div class="row"><dt class="mono">Sent</dt><dd id="sent">—</dd></div>
-            <div class="row"><dt class="mono">Code</dt><dd class="mono" id="codeOnCard">------</dd></div>
+            <div class="row"><dt>From</dt><dd class="kr" id="from">친구<small id="fromHandle"></small></dd></div>
+            <div class="row"><dt>Sent</dt><dd class="date" id="sent">—</dd></div>
+            <div class="row"><dt>Code</dt><dd class="code" id="codeOnCard">------</dd></div>
           </dl>
           <svg class="barcode" id="barcode" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
         <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
       </div>
       <div class="face back" aria-hidden="true">
-        <div class="top mono"><span>Invitation</span><span id="backNo">No. ------</span></div>
+        <div class="top"><span class="k">Invitation_</span><span class="n" id="backNo">No. ------</span></div>
         <svg class="press" viewBox="0 0 370 134"><use href="#wm"/></svg>
-        <div class="bottom mono"><span class="msg" id="backMsg">같이 플래터 꾸미자!</span><span class="url" id="backUrl">i.ditto.at</span></div>
+        <div class="bottom"><span class="msg">같이 플래터 꾸미자!</span><span class="n" id="backUrl">i.ditto.at</span></div>
         <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
       </div>
     </div>
   </div>
   <p class="hint" id="hint">카드를 눌러 뒷면을 봐요</p>
+  <div class="swatches" id="swatches" role="group" aria-label="그래픽 고르기"></div>
 
-  <div class="swatches" id="swatches" role="group" aria-label="그림 고르기"></div>
-  <p class="sw-label" id="swLabel"></p>
+  <div class="noapp" id="noapp" hidden><b>아직 디토 앱이 없나 봐요.</b> 앱을 받은 다음 이 링크를 다시 열거나, 가입할 때 초대코드 <b id="noappCode">------</b>를 넣어 주세요.</div>
 
   <div class="actions">
-    <a class="cta" id="open" href="https://ditto.at/download/">ditto! 앱에서 열기</a>
-    <button class="copy" id="copy" type="button">초대코드 복사<span class="mono" id="codeBtn">------</span></button>
+    <a class="btn" id="open" href="https://ditto.at/download/">디토 앱에서 열기 <span class="ar" aria-hidden="true">→</span></a>
+    <button class="btn line" id="copy" type="button"><span id="copyLabel">초대코드 복사</span><span class="code" id="codeBtn">------</span></button>
   </div>
-  <p class="note">앱이 설치돼 있으면 이 링크가 앱에서 바로 열려요.<br>가입할 때 초대코드를 넣으면 바로 친구가 돼요.</p>
+  <p class="note" id="note">앱이 있으면 바로 열려요. 아직 없다면 <a href="https://ditto.at/download/">출시 알림 받기 →</a></p>
 
   <ol class="steps">
-    <li><span class="n">1</span><span>ditto! 앱을 설치하고 열어요</span></li>
-    <li><span class="n">2</span><span>가입할 때 <b>초대코드</b>를 입력해요</span></li>
+    <li><span class="n">1</span><span>디토 앱을 받고 열어요</span></li>
+    <li><span class="n">2</span><span>가입할 때 <b>초대코드</b>를 넣어요</span></li>
     <li><span class="n">3</span><span id="step3">친구의 플래터에서 다시 만나요</span></li>
   </ol>
+  <p class="foot"><a href="https://ditto.at/">IYKYK Place_ ditto.at</a></p>
 </main>
 
 <script>
@@ -268,60 +278,44 @@
   var KEY = "sb_publishable_wZhXPAWXra62J60VkWJlhQ_2OPv-Zpf";
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
 
-  // ── 핸들 색 (DittoPrototype/DesignSystem/Elements/ProfileHandleColors.swift 와 같은 값) ──
-  var HANDLE = {
-    lavender: ["#CAB7F2", "#B092ED"], slate: ["#A8B3BF", "#79899B"], lime: ["#C5D593", "#A5BE57"],
-    teal: ["#8FB2BD", "#5C8F9F"], gold: ["#D5C194", "#BF9F5B"], coral: ["#EDAE91", "#E07B4C"],
-    pink: ["#EEAFC7", "#E37CA2"], sage: ["#B3BDA6", "#85946F"], mauve: ["#B5ADBA", "#908498"],
-    sky: ["#ADD5E5", "#79BBD4"]
+  // ── 디자인 시스템 '앱 아이콘 · 은은한 빛' (color-system-tokens.js brand.fluidPalettes · brand.appIcon) ──
+  var PALETTES = {
+    "purple-pink":  { name: "퍼플 · 핑크",       colors: ["#AA4AF4", "#6655D2", "#FA97E2"], base: "#EBD5FC" },
+    "deep-purple":  { name: "딥 퍼플 · 바이올렛", colors: ["#6655D2", "#7841C4", "#AA4AF4"], base: "#DCD8F5" },
+    "pink-coral":   { name: "핑크 · 코랄",       colors: ["#FA97E2", "#FF2CBF", "#FF5488"], base: "#FEE7F8" },
+    "peach-yellow": { name: "피치 · 옐로",       colors: ["#FF925D", "#F9F871", "#FA97E2"], base: "#FFE6DA" },
+    "cyan-blue":    { name: "시안 · 블루",       colors: ["#48B5F4", "#27E5F2", "#398FE8"], base: "#D5EEFC" },
+    "mint-lime":    { name: "민트 · 라임",       colors: ["#07E7B4", "#F9F871", "#39B9CC"], base: "#C6F9EE" }
   };
-  function handlePair(v) {
-    if (v && HANDLE[v]) return HANDLE[v];
-    if (v && /^#[0-9a-f]{6}$/i.test(v)) return [mixHex(v, "#FFFFFF", .45), v];
-    return HANDLE.lavender;
-  }
+  var ORDER = Object.keys(PALETTES);
+  var FIELDS = [ { c: [.38, .18], r: [.93, .9], o: .94 }, { c: [.08, .72], r: [.94, .92], o: .9 }, { c: [.9, .76], r: [1.02, .98], o: .9 } ];
+  var FALLOFF = [[0, 1], [.52, .38], [1, 0]];
+  var VEIL = [[0, .34], [.24, .12], [.62, 0], [1, .01]];
+  var serial = 0;
 
-  // ── 그림 = 주파수 동심원 (InviteTicket.swift PaintingStyle 과 같은 값) ──
-  // rings: 바깥에서 안쪽으로 번갈아 도는 띠 색. top/bottom: 위·아래로 번지는 바탕 기운.
-  var PAINTINGS = {
-    splup:   { name: "디토",   rings: ["#FA97E2", "#AA4AF4", "#F4F9FF", "#B9A9FA", "#6655D2"], top: "#FA97E2", bottom: "#B9A9FA" },
-    platter: { name: "플래터", rings: ["#FA97E2", "#FF925D", "#F9F871", "#F4F9FF", "#48B5F4"], top: "#FA97E2", bottom: "#48B5F4" },
-    night:   { name: "밤",     rings: ["#2D0080", "#6D01B9", "#AA4AF4", "#FA97E2", "#4E009C"], top: "#4E009C", bottom: "#2D0080" },
-    mine:    null   // 보낸 사람 핸들 색 — 아래에서 채운다
-  };
-  var ORDER = ["splup", "platter", "night", "mine"];
-
-  function hex2rgb(h) { h = h.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
-  function mixHex(a, b, t) { var x = hex2rgb(a), y = hex2rgb(b); return "#" + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, "0"); }).join(""); }
-  function smooth(t) { return t * t * (3 - 2 * t); }
-
-  function renderPainting(canvas, p, seed) {
-    var N = 140, W = Math.round(N * 1.12), H = Math.round(N * 1.12 * 1.5 / 1.32);
-    canvas.width = W; canvas.height = H;
-    var ctx = canvas.getContext("2d"), img = ctx.createImageData(W, H), d = img.data;
-    var rings = p.rings.map(hex2rgb), n = rings.length, top = hex2rgb(p.top), bot = hex2rgb(p.bottom);
-    var cx = .5, cy = .6, k = 8.2;
-    for (var y = 0; y < H; y++) {
-      for (var x = 0; x < W; x++) {
-        var u = x / W - cx, v = (y / H - cy) * 1.18;
-        var r = Math.sqrt(u * u + v * v), a = Math.atan2(v, u);
-        var wob = Math.min(1, r * 5);   // 가운데는 흔들림 없이 둥글게
-        r += wob * (.014 * Math.sin(a * 2 + seed) + .006 * Math.sin(a * 5 - seed * 1.7));
-        var s = r * k + seed * .15, i = Math.floor(s), f = smooth(smooth(s - i));
-        var c0 = rings[((i % n) + n) % n], c1 = rings[(((i + 1) % n) + n) % n];
-        var vy = y / H, wTop = Math.max(0, .5 - vy) * .7, wBot = Math.max(0, vy - .55) * .8;
-        var o = (y * W + x) * 4;
-        for (var ch = 0; ch < 3; ch++) {
-          var c = c0[ch] + (c1[ch] - c0[ch]) * f;
-          c = c + (top[ch] - c) * wTop;
-          c = c + (bot[ch] - c) * wBot;
-          d[o + ch] = c;
-        }
-        d[o + 3] = 255;
-      }
-    }
-    ctx.putImageData(img, 0, 0);
+  /** 은은한 빛 표면을 svg에 그린다. W×H 좌표, 로고는 짧은 변의 logo배 */
+  function drawGlow(svg, key, W, H, logo, flow) {
+    var p = PALETTES[key] || PALETTES["purple-pink"], id = "gl" + (++serial), s = Math.min(W, H), o = .3;
+    var defs = '<filter id="' + id + 'b" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (s * .1) + '"/></filter>' +
+      '<filter id="' + id + 'r" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + (s * 12 / 240) + '"/></filter>' +
+      '<linearGradient id="' + id + 'v" x1="0" y1="0" x2="0" y2="1">' + VEIL.map(function (v) { return '<stop offset="' + v[0] + '" stop-color="#fff" stop-opacity="' + v[1] + '"/>'; }).join("") + "</linearGradient>";
+    var fields = "";
+    FIELDS.forEach(function (f, j) {
+      defs += '<radialGradient id="' + id + "c" + j + '" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="translate(' + f.c[0] * W + " " + f.c[1] * H + ") scale(" + f.r[0] * W + " " + f.r[1] * H + ')">' +
+        FALLOFF.map(function (x) { return '<stop offset="' + x[0] + '" stop-color="' + p.colors[j] + '" stop-opacity="' + x[1] + '"/>'; }).join("") + "</radialGradient>";
+      fields += '<g class="flow' + (flow ? " f" + j : "") + '"><rect x="' + (-o * W) + '" y="' + (-o * H) + '" width="' + W * (1 + 2 * o) + '" height="' + H * (1 + 2 * o) + '" fill="url(#' + id + "c" + j + ')" opacity="' + f.o + '"/></g>';
+    });
+    var L = s * logo;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    svg.innerHTML = "<defs>" + defs + "</defs>" +
+      '<rect width="' + W + '" height="' + H + '" fill="' + p.base + '"/>' +
+      '<g filter="url(#' + id + 'b)">' + fields + "</g>" +
+      '<rect width="' + W + '" height="' + H + '" fill="url(#' + id + 'v)"/>' +
+      '<rect width="' + W + '" height="' + H + '" fill="none" stroke="#fff" stroke-width="' + (s * 26 / 240) + '" opacity=".68" filter="url(#' + id + 'r)"/>' +
+      '<use href="#mk" x="' + (W - L) / 2 + '" y="' + (H - L) / 2 + '" width="' + L + '" height="' + L + '" fill="#fff"/>';
   }
 
   // ── Code128-B (실제로 찍힌다: i.ditto.at/{코드}) ──
@@ -330,23 +324,19 @@
     var vals = [104], sum = 104;
     for (var i = 0; i < text.length; i++) { var v = text.charCodeAt(i) - 32; vals.push(v); sum += v * (i + 1); }
     vals.push(sum % 103); vals.push(106);
-    var x = 10, rects = "";   // 10모듈 여백
+    var x = 10, rects = "";
     vals.forEach(function (v) {
       var pat = C128[v];
-      for (var j = 0; j < pat.length; j++) {
-        var w = +pat[j];
-        if (j % 2 === 0) rects += '<rect x="' + x + '" y="0" width="' + w + '" height="1"/>';
-        x += w;
-      }
+      for (var j = 0; j < pat.length; j++) { var w = +pat[j]; if (j % 2 === 0) rects += '<rect x="' + x + '" y="0" width="' + w + '" height="1"/>'; x += w; }
     });
     svg.setAttribute("viewBox", "0 0 " + (x + 10) + " 1");
-    svg.innerHTML = '<g fill="#171719">' + rects + "</g>";
+    svg.innerHTML = '<g fill="#16121B">' + rects + "</g>";
   }
 
-  // ── 데이터 ──
+  // ── 링크 해석 ──
   var seg = location.pathname.split("/").filter(Boolean);
   var q = new URLSearchParams(location.search);
-  // 옛 프로필 링크 i.ditto.at/u/{handle} → ditto.at/{handle} (기존 페이지 동작 유지)
+  // 옛 프로필 링크 i.ditto.at/u/{handle} → ditto.at/{handle}
   if (seg[0] === "u" && seg[1]) {
     var uh = decodeURIComponent(seg[1]).replace(/^@/, "");
     location.replace(/^[A-Za-z0-9_.]{1,30}$/.test(uh) ? "https://ditto.at/" + uh.toLowerCase() : "https://ditto.at/");
@@ -355,76 +345,85 @@
   var demo = location.protocol === "file:" || q.has("demo") || /\/design\/invite-card/.test(location.pathname);
   var code = /^[A-Za-z0-9]{6}$/.test(seg[0] || "") ? seg[0].toUpperCase() : (demo ? (q.get("code") || "7K2QXA").toUpperCase() : null);
   if (!code) { location.replace("https://ditto.at/"); return; }
+  var handleQ = (q.get("h") || "").replace(/^@/, "");
+  if (!/^[A-Za-z0-9_.]{1,30}$/.test(handleQ)) handleQ = "";
+  var current = PALETTES[q.get("p")] ? q.get("p") : "purple-pink";
 
-  var person = { name: null, handle: null, color: null, avatar: null };
-  var current = ORDER.indexOf(q.get("p")) >= 0 ? q.get("p") : "splup";
-  var seed = 0; for (var si = 0; si < code.length; si++) seed += code.charCodeAt(si) * (si + 1);
-  seed = (seed % 628) / 100;   // 같은 코드 = 같은 무늬
-
-  function fmtDate(d) { return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0"); }
-  var sent = q.get("d") && /^\d{4}-\d{2}-\d{2}$/.test(q.get("d")) ? new Date(q.get("d") + "T00:00:00") : new Date();
-
-  function paint() {
-    var pair = handlePair(person.color);
-    PAINTINGS.mine = {
-      name: person.name ? person.name + "의 색" : "보낸 사람 색",
-      rings: [pair[0], "#F4F9FF", pair[1], mixHex(pair[1], "#AA4AF4", .35), pair[0]],
-      top: pair[0], bottom: mixHex(pair[1], "#FFFFFF", .2)
-    };
-    var av = $("avatar");
-    av.style.background = "linear-gradient(180deg," + pair[0] + "," + pair[1] + ")";
-    av.innerHTML = "";
-    if (person.avatar) {
-      var img = new Image(); img.alt = ""; img.onload = function () { av.innerHTML = ""; av.appendChild(img); };
-      img.src = person.avatar;
-    }
-    if (!av.firstChild) av.textContent = (person.name || "d").charAt(0).toUpperCase();
-
-    $("from").firstChild.nodeValue = person.name || "친구";
-    $("fromHandle").textContent = person.handle ? "@" + person.handle : "";
-    $("headline").textContent = person.name ? person.name + "님이 ditto!에 초대했어요" : "친구가 ditto!에 초대했어요";
-    if (person.name) $("step3").textContent = person.name + "님의 플래터에서 다시 만나요";
-    document.title = person.name ? person.name + "님의 ditto! 초대장" : "ditto! 초대장";
-    buildSwatches();
+  // [디토 앱에서 열기] — 다른 도메인(ditto.at)의 유니버설 링크로 앱을 연다. 앱이 없으면 ditto.at이 ?noapp=1로 돌려보낸다.
+  function openHref() {
+    var qs = new URLSearchParams();
+    if (handleQ) qs.set("h", handleQ);
+    qs.set("p", current);
+    return "https://ditto.at/i/" + code + "?" + qs.toString();
+  }
+  var isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var noApp = q.get("noapp") === "1";
+  if (noApp) {
+    $("noapp").hidden = false; $("noappCode").textContent = code;
+    $("open").firstChild.nodeValue = "디토 앱 받기 ";
+    $("open").href = "https://ditto.at/download/";
+    $("note").innerHTML = '앱을 받은 뒤엔 이 링크에서 <a id="retry" href="#">디토 앱에서 열기 →</a>';
+  } else if (!isIOS && !demo) {
+    $("note").textContent = "디토는 iPhone 앱이에요. iPhone에서 이 링크를 열면 앱으로 바로 이어져요.";
+  }
+  function syncOpen() {
+    if (!noApp) $("open").href = openHref();
+    var r = $("retry"); if (r) r.href = openHref();
   }
 
-  $("sent").textContent = fmtDate(sent);
-  $("codeOnCard").textContent = code;
-  $("codeBtn").textContent = code;
-  $("backNo").textContent = "No. " + code;
-  $("backUrl").textContent = "i.ditto.at/" + code;
+  // ── 카드 내용 ──
+  function fmtDate(d) { return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0"); }
+  $("sent").textContent = fmtDate(new Date());
+  $("codeOnCard").textContent = code; $("codeBtn").textContent = code;
+  $("backNo").textContent = "No. " + code; $("backUrl").textContent = "i.ditto.at/" + code;
   drawBarcode($("barcode"), "i.ditto.at/" + code);
 
-  // ── 그림 고르기 (바꾸면 옆으로 쓸려 넘어간다) ──
-  function swatchBg(p) { return "radial-gradient(circle at 50% 60%," + p.rings[2] + " 0 18%," + p.rings[1] + " 34%," + p.rings[0] + " 58%," + p.bottom + " 100%)"; }
+  var HANDLE = { lavender: ["#CAB7F2", "#B092ED"], slate: ["#A8B3BF", "#79899B"], lime: ["#C5D593", "#A5BE57"], teal: ["#8FB2BD", "#5C8F9F"], gold: ["#D5C194", "#BF9F5B"], coral: ["#EDAE91", "#E07B4C"], pink: ["#EEAFC7", "#E37CA2"], sage: ["#B3BDA6", "#85946F"], mauve: ["#B5ADBA", "#908498"], sky: ["#ADD5E5", "#79BBD4"] };
+  function showPerson(p) {
+    $("from").firstChild.nodeValue = p.name || "친구";
+    $("fromHandle").textContent = p.handle ? "@" + p.handle : "";
+    $("headline").innerHTML = p.name ? escapeHTML(p.name) + "님의 방에<br>초대받았어요." : "친구의 방에<br>초대받았어요.";
+    if (p.name) $("step3").textContent = p.name + "님의 플래터에서 다시 만나요";
+    document.title = p.name ? p.name + "님의 ditto! 초대장" : "ditto! 초대장";
+    var pair = HANDLE[p.color] || (/^#[0-9a-f]{6}$/i.test(p.color || "") ? [p.color, p.color] : HANDLE.lavender);
+    var av = $("avatar");
+    av.style.background = "linear-gradient(180deg," + pair[0] + "," + pair[1] + ")";
+    if (p.avatar) {
+      var img = new Image(); img.alt = ""; img.decoding = "async";
+      img.onload = function () { av.innerHTML = ""; av.appendChild(img); };
+      img.src = p.avatar;
+    }
+  }
+  function escapeHTML(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  // ── 그래픽 + 고르기 (바꾸면 옆으로 쓸려 넘어간다) ──
+  var GW = 300, GH = 333;
+  drawGlow($("g"), current, GW, GH, .42, !reduce);
   function buildSwatches() {
     var box = $("swatches"); box.innerHTML = "";
     ORDER.forEach(function (key) {
-      var p = PAINTINGS[key], b = document.createElement("button");
-      b.className = "sw"; b.type = "button"; b.style.background = swatchBg(p);
-      b.setAttribute("aria-label", p.name); b.setAttribute("aria-pressed", key === current ? "true" : "false");
+      var b = document.createElement("button");
+      b.className = "sw"; b.type = "button"; b.title = PALETTES[key].name;
+      b.setAttribute("aria-label", "그래픽 " + PALETTES[key].name); b.setAttribute("aria-pressed", key === current ? "true" : "false");
+      var s = document.createElementNS(NS, "svg"); drawGlow(s, key, 100, 100, .5, false); b.appendChild(s);
       b.addEventListener("click", function () { choose(key); });
       box.appendChild(b);
     });
-    $("swLabel").textContent = PAINTINGS[current].name;
   }
   var wiping = false;
   function choose(key) {
     if (key === current || wiping) return;
-    current = key; buildSwatches();
-    var next = $("paintNext");
-    renderPainting(next, PAINTINGS[key], seed);
-    if (reduce) { renderPainting($("paint"), PAINTINGS[key], seed); return; }
-    wiping = true;
-    next.classList.remove("wipe"); void next.offsetWidth; next.classList.add("wipe");
-    setTimeout(function () {
-      renderPainting($("paint"), PAINTINGS[key], seed);
-      next.classList.remove("wipe"); wiping = false;
-    }, 780);
+    current = key; buildSwatches(); syncOpen();
+    var next = $("gNext");
+    if (reduce) { drawGlow($("g"), key, GW, GH, .42, false); return; }
+    drawGlow(next, key, GW, GH, .42, false);
+    wiping = true; next.classList.remove("wipe"); void next.getBoundingClientRect(); next.classList.add("wipe");
+    setTimeout(function () { drawGlow($("g"), key, GW, GH, .42, true); next.classList.remove("wipe"); next.innerHTML = ""; wiping = false; }, 780);
   }
+  buildSwatches(); syncOpen();
 
   // ── 기울이기 · 뒤집기 ──
-  var card = $("card"), stage = $("stage"), flipped = false, tx = 0, ty = 0, down = null, moved = false, idle = !reduce, t0 = performance.now();
+  var card = $("card"), stage = $("stage"), flipped = false, down = null, moved = false, idle = !reduce, t0 = performance.now();
   function apply(rx, ry, lx, ly, live) {
     card.classList.toggle("live", !!live);
     card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
@@ -445,12 +444,12 @@
     if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8) moved = true;
     if (moved) tiltFrom(e);
   });
-  stage.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") { rest(); } });
+  stage.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") rest(); });
   stage.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY }; moved = false; idle = false; });
   stage.addEventListener("pointercancel", function () { down = null; rest(); });
   stage.addEventListener("pointerup", function (e) {
-    var wasTap = down && !moved; down = null;
-    if (wasTap && card.contains(e.target)) flip(); else if (e.pointerType !== "mouse") rest();
+    var tap = down && !moved; down = null;
+    if (tap && card.contains(e.target)) flip(); else if (e.pointerType !== "mouse") rest();
   });
   card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
   function flip() {
@@ -459,19 +458,15 @@
     $("hint").textContent = flipped ? "다시 누르면 앞면으로 돌아와요" : "카드를 눌러 뒷면을 봐요";
     rest();
   }
-  // 가만히 두면 천천히 숨 쉬듯 흔들린다 — 빛이 종이 위를 지나가는 게 보이도록
   function sway(now) {
-    if (idle) {
-      var t = (now - t0) / 1000;
-      var ry = Math.sin(t * .7) * 7, rx = Math.sin(t * .9 + 1) * 4;
-      card.classList.add("live");
-      card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
-      card.style.setProperty("--gx", (50 + ry * 5) + "%"); card.style.setProperty("--gy", (30 - rx * 4) + "%");
-      card.style.setProperty("--px", (50 - ry * 5) + "%");
-      requestAnimationFrame(sway);
-    }
+    if (!idle) return;
+    var t = (now - t0) / 1000, ry = Math.sin(t * .7) * 7, rx = Math.sin(t * .9 + 1) * 4;
+    card.classList.add("live");
+    card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
+    card.style.setProperty("--gx", (50 + ry * 5) + "%"); card.style.setProperty("--gy", (30 - rx * 4) + "%"); card.style.setProperty("--px", (50 - ry * 5) + "%");
+    requestAnimationFrame(sway);
   }
-  if (demo && q.has("og")) { document.documentElement.classList.add("og"); idle = false; apply(-4, 9, 70, 15, false); }
+  if (demo && q.has("og")) { document.documentElement.classList.add("og"); idle = false; card.style.transition = "none"; apply(-4, 10, 70, 15, false); card.classList.remove("live"); }
   if (demo && q.has("back")) { flipped = true; idle = false; card.style.transition = "none"; rest(); card.classList.remove("live"); }
   if (idle) requestAnimationFrame(sway);
 
@@ -479,43 +474,29 @@
   $("copy").addEventListener("click", function () {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(code).then(function () {
-      var b = $("copy"), old = b.innerHTML;
-      b.textContent = "복사됐어요!";
-      setTimeout(function () { b.innerHTML = old; }, 1600);
+      $("copyLabel").textContent = "복사됐어요!";
+      setTimeout(function () { $("copyLabel").textContent = "초대코드 복사"; }, 1600);
     }, function () {});
   });
 
-  // ── 첫 그림 + 보낸 사람 정보 ──
-  paint();
-  renderPainting($("paint"), PAINTINGS[current], seed);
-
+  // ── 보낸 사람 ──
   if (demo) {
-    person = { name: q.has("name") ? q.get("name") || null : "지우", handle: q.has("h") ? q.get("h") || null : "jiwoo", color: q.get("c") || "pink", avatar: null };
-    paint(); renderPainting($("paint"), PAINTINGS[current], seed);
+    showPerson({ name: q.has("name") ? q.get("name") || null : "지우", handle: q.has("h") ? handleQ || null : "jiwoo", color: q.get("c") || "lavender", avatar: q.get("av") || null });
     return;
   }
+  showPerson({});
   // 코드 → 보낸 사람 이름 (invite_owner). ?h= 로 온 프로필은 이름이 같을 때만 믿는다.
-  function rpcOwner() {
-    return fetch(SB + "/rest/v1/rpc/invite_owner", {
-      method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ code: code })
-    }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
-  }
-  function profileBy(handle) {
-    if (!handle || !/^[A-Za-z0-9_.]{1,30}$/.test(handle)) return Promise.resolve(null);
-    return fetch(SB + "/rest/v1/profiles?select=nickname,handle,avatar_url,handle_color&handle=eq." + encodeURIComponent(handle.toLowerCase()) + "&limit=1", { headers: { apikey: KEY } })
-      .then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) { return rows && rows[0] || null; }).catch(function () { return null; });
-  }
-  Promise.all([rpcOwner(), profileBy(q.get("h"))]).then(function (res) {
-    var owner = typeof res[0] === "string" ? res[0] : null, prof = res[1];
-    if (!owner) return;
-    person.name = owner;
-    if (prof && prof.nickname === owner) {
-      person.handle = prof.handle;
-      person.color = prof.handle_color;
-      person.avatar = prof.avatar_url && /^https:\/\//.test(prof.avatar_url) ? prof.avatar_url : null;
-    }
-    paint();
-    if (current === "mine") renderPainting($("paint"), PAINTINGS.mine, seed);
+  var owner = fetch(SB + "/rest/v1/rpc/invite_owner", { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ code: code }) })
+    .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+  var prof = handleQ ? fetch(SB + "/rest/v1/profiles?select=nickname,handle,avatar_url,handle_color&handle=eq." + encodeURIComponent(handleQ.toLowerCase()) + "&limit=1", { headers: { apikey: KEY } })
+    .then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) { return rows && rows[0] || null; }).catch(function () { return null; }) : Promise.resolve(null);
+  Promise.all([owner, prof]).then(function (res) {
+    var name = typeof res[0] === "string" ? res[0] : null, p = res[1];
+    if (!name) { handleQ = ""; syncOpen(); return; }
+    var ok = p && p.nickname === name;
+    if (!ok) { handleQ = ""; syncOpen(); }
+    showPerson({ name: name, handle: ok ? p.handle : null, color: ok ? p.handle_color : null,
+                 avatar: ok && p.avatar_url && /^https:\/\//.test(p.avatar_url) ? p.avatar_url : null });
   });
 })();
 </script>
