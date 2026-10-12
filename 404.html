@@ -7,142 +7,515 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="위젯으로 서로의 하루를 주고받는 친구들의 공간">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ditto!">
-<meta property="og:description" content="위젯으로 서로의 하루를 주고받는 친구들의 공간, ditto!">
-<meta property="og:image" content="https://ditto.at/assets/og-landing.png">
+<meta property="og:title" content="ditto! 초대장">
+<meta property="og:description" content="친구가 ditto!에 초대했어요 — 위젯으로 서로의 하루를 주고받는 친구들의 공간">
+<meta property="og:image" content="https://i.ditto.at/og-invite.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ditto.at/assets/og-landing.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<!--
+  ditto! 초대장 (2026-10-12)
+  레퍼런스: 가로 티켓 — 왼쪽 그림 · 오른쪽 스텁(워드마크·사진·핸들·날짜·실제로 찍히는 바코드), 뒷면엔 워드마크 눌림.
+  기울이면 빛이 종이 위를 지나가고, 누르면 뒤집히고, 그림을 바꾸면 옆으로 쓸려 넘어간다.
+  디토로 옮긴 것:
+    · 그림 = '주파수' 동심원. 색은 브랜드 v3 코어(Splup #AA4AF4 · Deep #6655D2 · Platter Pink #FA97E2 · night 램프 · 액센트)
+      + 보낸 사람의 핸들 색(profiles.handle_color). 보낸 사람이 앱에서 고른 그림이 링크(?p=)로 그대로 온다.
+    · 스텁 = 워드마크 · 보낸 사람 사진 · FROM / SENT / CODE · i.ditto.at/{코드} Code128 바코드.
+    · 앱(InviteTicket.swift)과 같은 규칙으로 그린다 — 값을 바꾸면 두 곳 모두 바꾼다.
+  링크: i.ditto.at/{6자 코드}?h={handle}&p={그림} — h·p는 선택. 코드는 invite_owner()로 보낸 사람 이름을 확인한다.
+-->
 <style>
+  :root {
+    --bg: #F4F9FF;            /* Bright White 11-0601 */
+    --ink: #171719;
+    --ink-2: #5C5C66;
+    --ink-3: #9A9AA4;
+    --brand: #AA4AF4;         /* Splup Purple */
+    --brand-ink: #7E37C2;
+    --brand-soft: #F1E6FD;
+    --stock: #FBFAF7;         /* 카드 종이 */
+    --stock-back: #F6F3FA;
+    --line: rgba(23, 23, 25, .08);
+    --shadow: 0 30px 60px -20px rgba(45, 0, 128, .35), 0 12px 24px -12px rgba(23, 23, 25, .25);
+    --cta: linear-gradient(135deg, #B9A9FA 0%, #9A36F0 55%, #920CB3 100%);  /* Splup Gradient */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1C1D24; --ink: #F4F9FF; --ink-2: #B9BAC6; --ink-3: #7D7E8A;
+      --brand-ink: #CFA3FA; --brand-soft: rgba(170, 74, 244, .16); --line: rgba(244, 249, 255, .1);
+      --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 12px 24px -12px rgba(0, 0, 0, .6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1C1D24; --ink: #F4F9FF; --ink-2: #B9BAC6; --ink-3: #7D7E8A;
+    --brand-ink: #CFA3FA; --brand-soft: rgba(170, 74, 244, .16); --line: rgba(244, 249, 255, .1);
+    --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 12px 24px -12px rgba(0, 0, 0, .6);
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { min-height: 100%; }
-  body {
-    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
-    background: linear-gradient(180deg, #aab6f0 0%, #cdd7f6 46%, #eef1fb 100%);
-    min-height: 100svh;
-  }
-  .wrap { min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 24px 24px 96px; color: #1c1c22; }
-  .card {
-    width: 100%; max-width: 380px; background: rgba(255,255,255,.92);
-    border-radius: 28px; padding: 44px 28px 36px; text-align: center;
-    box-shadow: 0 18px 60px rgba(60,60,120,.18);
-    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  }
   [hidden] { display: none !important; }
-  .wordmark { height: 30px; margin-bottom: 24px; }
-  .headline { font-size: 19px; font-weight: 700; line-height: 1.45; margin-bottom: 6px; }
-  .sub { font-size: 13.5px; font-weight: 600; color: #6b6b76; line-height: 1.55; }
-  .code {
-    margin: 24px 0 10px; font-size: 34px; font-weight: 700; letter-spacing: .18em;
-    color: #7e37c2; background: #f4ecfb; border-radius: 16px; padding: 16px 8px 16px calc(8px + .18em);
-    -webkit-user-select: all; user-select: all;
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100svh; overflow-x: hidden;
   }
-  .copy { display: inline-block; margin-bottom: 22px; font-size: 12.5px; font-weight: 600; color: #7e37c2; background: none; border: none; cursor: pointer; font-family: inherit; }
-  .steps { text-align: left; font-size: 13.5px; font-weight: 600; color: #44444c; line-height: 2; }
-  .steps b { font-weight: 700; }
-  .foot { margin-top: 26px; font-size: 11.5px; font-weight: 600; color: #9a9aa4; line-height: 1.6; }
-  .avatar { width: 108px; height: 108px; border-radius: 108px; object-fit: cover; margin: 0 auto 16px; display: block; border: 3px solid #f0e8fa; }
-  .avatar-fallback { display: flex; align-items: center; justify-content: center; background: linear-gradient(150deg, #b46ce0, #f39fce); color: #fff; font-size: 48px; font-weight: 700; }
-  .name { font-size: 22px; font-weight: 700; color: #1c1c22; margin-bottom: 2px; }
-  .handle { font-size: 14px; font-weight: 600; color: #9b4be0; margin-bottom: 14px; }
-  .cta { display: block; margin: 22px 0 10px; padding: 15px; border-radius: 14px; background: #b255d9; color: #fff; font-size: 15.5px; font-weight: 700; text-decoration: none; transition: background .18s ease; }
-  .cta:hover { background: rgba(134,61,166,.9); }
-  .cta-note { font-size: 12px; font-weight: 500; color: #9a9aa4; line-height: 1.6; margin-bottom: 24px; }
-  .banner {
-    position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    width: calc(100% - 32px); max-width: 380px; display: flex; align-items: center; gap: 10px; padding: 12px 14px;
-    border-radius: 16px; text-decoration: none; background: rgba(28,20,40,.92);
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 10px 34px rgba(40,16,60,.35);
+  .mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; }
+
+  .page {
+    max-width: 480px; margin: 0 auto;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 16px calc(40px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; align-items: center; text-align: center;
   }
-  .banner-mark { height: 20px; filter: brightness(0) invert(1); }
-  .banner-text { flex: 1 1; font-size: 13px; font-weight: 600; color: #fff; text-align: left; }
-  .banner-btn { font-size: 13px; font-weight: 700; color: #fff; background: #b255d9; padding: 8px 16px; border-radius: 10px; white-space: nowrap; }
+  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+  h1 { margin-top: 10px; font-size: 24px; line-height: 1.35; font-weight: 700; word-break: keep-all; }
+  .sub { margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--ink-2); word-break: keep-all; }
+
+  /* ── 카드 ─────────────────────────────────────────────── */
+  .stage {
+    width: 100%; margin-top: 32px; perspective: 1100px;
+    touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .card {
+    position: relative; width: 100%; aspect-ratio: 3 / 2; container-type: inline-size;
+    transform-style: preserve-3d; cursor: pointer;
+    transition: transform .7s cubic-bezier(.2, .8, .2, 1);
+  }
+  .card.live { transition: transform .12s ease-out; }
+  .face {
+    position: absolute; inset: 0; border-radius: 3.4cqw; overflow: hidden;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    box-shadow: var(--shadow); background: var(--stock);
+  }
+  .back { transform: rotateY(180deg); background: var(--stock-back); }
+
+  .front { display: flex; }
+  .painting { position: relative; width: 62%; height: 100%; overflow: hidden; background: #E9E1F7; }
+  .painting canvas {
+    position: absolute; inset: -6%; width: 112%; height: 112%;
+    filter: blur(.75cqw) saturate(1.1);
+  }
+  #paintNext { clip-path: inset(0 100% 0 0); }
+  #paintNext.wipe { transition: clip-path .75s cubic-bezier(.65, 0, .35, 1); clip-path: inset(0 0 0 0); }
+  /* 그림과 스텁 사이 — 절취선 */
+  .painting::after {
+    content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 0;
+    border-right: .35cqw dashed rgba(255, 255, 255, .55);
+  }
+
+  .stub {
+    flex: 1; display: flex; flex-direction: column; text-align: left;
+    padding: 4.4cqw 3.6cqw 3.8cqw 3.8cqw; color: #171719;
+  }
+  .stub .wm { width: 16cqw; height: auto; color: #171719; }
+  .avatar {
+    margin-top: 2.6cqw; width: 11cqw; height: 11cqw; border-radius: 2.6cqw; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5.6cqw; font-weight: 700; color: #171719;
+    box-shadow: inset 0 0 0 .25cqw rgba(255, 255, 255, .7);
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rows { margin-top: auto; display: flex; flex-direction: column; gap: 1.2cqw; }
+  .row dt { font-size: 2.3cqw; letter-spacing: .08em; color: #8A8A94; text-transform: uppercase; }
+  .row dd { margin-top: .2cqw; font-size: 4cqw; line-height: 1.15; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row dd small { display: block; font-size: 2.7cqw; font-weight: 500; color: #6B6B75; margin-top: .2cqw; }
+  .barcode { margin-top: 2.6cqw; width: 100%; height: 7.6cqw; display: block; }
+
+  /* 종이 결 · 진주빛 코팅 · 빛 */
+  .grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 160px 160px;
+  }
+  .pearl {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; opacity: .55;
+    background: linear-gradient(115deg, rgba(250,151,226,.0) 20%, rgba(250,151,226,.55) 38%, rgba(185,169,250,.6) 50%, rgba(72,181,244,.5) 62%, rgba(72,181,244,0) 80%);
+    background-size: 260% 260%; background-position: var(--px, 50%) var(--py, 50%);
+  }
+  .glare {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
+    background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgba(255,255,255,.75), rgba(255,255,255,0) 46%);
+    opacity: var(--go, .5);
+  }
+
+  /* 뒷면 — 워드마크가 눌려 있다 */
+  .back { display: flex; flex-direction: column; justify-content: space-between; padding: 5cqw 5.4cqw; text-align: left; color: #171719; }
+  .back .top, .back .bottom { display: flex; justify-content: space-between; align-items: baseline; font-size: 2.2cqw; letter-spacing: .08em; color: #8A8A94; text-transform: uppercase; }
+  .press { align-self: center; width: 54cqw; height: auto; color: var(--stock-back);
+    filter: drop-shadow(-.22cqw -.22cqw 0 rgba(255,255,255,.95)) drop-shadow(.25cqw .3cqw .25cqw rgba(45,0,128,.2)); }
+  .back .msg { font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif; font-size: 3.6cqw; font-weight: 600; letter-spacing: -.01em; text-transform: none; color: #171719; }
+  .back .url { text-transform: none; letter-spacing: .02em; }
+
+  .hint { margin-top: 18px; font-size: 13px; color: var(--ink-3); }
+
+  /* 그림 고르기 */
+  .swatches { margin-top: 18px; display: flex; gap: 10px; justify-content: center; }
+  .sw {
+    width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
+    position: relative; outline: none; -webkit-tap-highlight-color: transparent;
+    box-shadow: inset 0 0 0 1px rgba(23,23,25,.08);
+    transition: transform .2s ease;
+  }
+  .sw:active { transform: scale(.92); }
+  .sw[aria-pressed="true"]::after {
+    content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--brand);
+  }
+  .sw:focus-visible::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--ink); }
+  .sw-label { margin-top: 10px; font-size: 13px; color: var(--ink-2); min-height: 18px; }
+
+  /* 행동 */
+  .actions { width: 100%; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+  .cta {
+    display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 16px;
+    background: var(--cta); color: #fff; font-size: 17px; font-weight: 700; text-decoration: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px -10px rgba(146,12,179,.6);
+  }
+  .cta:active { filter: brightness(.95); }
+  .copy {
+    min-height: 52px; border-radius: 16px; border: none; cursor: pointer; font-family: inherit;
+    background: var(--brand-soft); color: var(--brand-ink); font-size: 15px; font-weight: 600;
+  }
+  .copy .mono { letter-spacing: .12em; margin-left: 6px; font-weight: 700; }
+  .note { margin-top: 12px; font-size: 13px; line-height: 1.55; color: var(--ink-3); word-break: keep-all; }
+
+  .steps { width: 100%; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); list-style: none; text-align: left; display: flex; flex-direction: column; gap: 12px; }
+  .steps li { display: flex; gap: 12px; align-items: baseline; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+  .steps .n { flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--brand-soft); color: var(--brand-ink); transform: translateY(-1px); }
+  .steps b { color: var(--ink); font-weight: 600; }
+
+  /* 링크 미리보기 이미지(og-invite.png) 촬영용 — ?og */
+  html.og body { background: linear-gradient(160deg, #F4F9FF 0%, #EDE4FB 100%); }
+  html.og .page { max-width: none; height: 100svh; justify-content: center; padding: 0; }
+  html.og .page > :not(.stage) { display: none; }
+  html.og .stage { width: 640px; margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card, .card.live, #paintNext.wipe { transition: none; }
+  }
 </style>
 </head>
 <body>
-<main class="wrap">
-  <!-- 초대 링크: i.ditto.at/{6자 코드} -->
-  <section class="card" id="invite" hidden>
-    <img class="wordmark" src="/wordmark.svg" alt="ditto!">
-    <h1 class="headline">친구가 ditto!에 초대했어요</h1>
-    <p class="sub">위젯으로 서로의 하루를 주고받는 친구들의 공간</p>
-    <div class="code" id="code">------</div>
-    <button class="copy" id="copy" type="button">코드 복사하기</button>
-    <div class="steps">
-      <div>1&nbsp;&nbsp;ditto! 앱을 열어주세요</div>
-      <div>2&nbsp;&nbsp;가입할 때 <b>초대코드</b>를 입력해주세요</div>
-      <div>3&nbsp;&nbsp;친구의 플래터에서 다시 만나요</div>
-    </div>
-    <p class="foot">앱이 설치돼 있다면 이 링크가 앱에서 바로 열려요.<br>ditto!는 곧 App Store에서 만날 수 있어요.</p>
-  </section>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wm" viewBox="0 0 370 134"><g clip-path="url(#wmclip)">
+<path d="M140.496 15.9557C140.496 15.9557 120.588 0.280443 77.741 0C75.1142 15.1439 70.3181 40.5535 64.7177 70.738C62.9542 43.2029 47.0902 38.4354 38.4278 40.2214C16.9782 44.6568 -7.18676 84.0886 2.00698 112.362C11.2745 140.863 52.9341 134.251 70.0377 130.76C70.0082 130.672 69.986 130.583 69.9565 130.502C69.6392 101.808 73.2695 62.1993 99.2053 37.6974C110.709 26.8339 128.779 16.7749 140.503 15.9631L140.496 15.9557ZM53.3989 115.52C49.7982 119.454 41.7481 114.133 34.554 104.775C19.7673 85.5203 20.4609 63.941 31.1746 63.8081C36.9742 63.7343 42.6778 68.1255 48.7357 86.2288C52.3069 96.9077 55.5535 113.159 53.3916 115.52H53.3989Z" fill="currentColor"></path>
+<path d="M227.933 118.015C241.332 137.756 263.121 132.214 273.399 124.827C306.345 101.173 287.102 40.3986 240.579 40.3986C222.937 40.3986 214.083 53.3063 212.74 63.3284C225.121 65.7712 236.005 73.7417 240.454 80.9742C245.804 67.3063 250.909 63.7343 256.097 63.8008C266.81 63.941 267.083 87.2915 252.717 104.775C248.253 110.199 238.366 118.79 227.933 118.015Z" fill="currentColor"></path>
+<path d="M109.174 37.594C110.62 39.1586 152.811 54.1254 167.14 62.1845C186.693 73.1881 162.396 55.8228 162.396 55.8228L149.328 130.605H181.425L170.512 46.8929C175.338 49.5129 191.202 54.4944 204.852 48.797C222.775 39.5055 211.877 -0.819233 109.167 37.594H109.174Z" fill="currentColor"></path>
+<path d="M243.811 87.9409C243.811 87.9409 243.833 87.904 243.841 87.8818C243.818 87.8818 243.796 87.8818 243.774 87.8966C243.782 87.9114 243.796 87.9335 243.804 87.9483L243.811 87.9409Z" fill="currentColor"></path>
+<path d="M189.401 102.472C187.918 99.7416 187.653 98.6568 186.376 96.2435C132.926 110.022 90.1887 90.5387 144.827 66.8486C138.511 59.6088 114.523 54.6346 94.3281 60.5977C89.4065 62.0516 88.0194 63.4833 87.8349 64.3837C85.3336 72.2066 109.115 66.0073 80.1907 130.598L189.394 102.465L189.401 102.472Z" fill="currentColor"></path>
+<path d="M237.694 92.5239C230.242 78.1549 196.75 62.8856 168.033 60.214C164.735 59.9778 187.07 79.0184 202.262 91.5202L194.419 130.598H220.384L211.345 98.6346C221.461 109.653 234.809 110.915 238.056 104.605C239.635 101.542 240.218 97.3874 237.694 92.5239Z" fill="currentColor"></path>
+<path d="M322.297 93.6236C320.18 95.7491 317.066 95.9041 315.516 91.8081C314.653 89.5129 312.513 84.1698 306.906 76.9594C303.895 73.0849 298.228 67.2177 294.628 60.4059C290.769 53.107 290.009 48.9742 290.621 42.7823C291.425 34.7749 299.453 24.8782 310.639 25.5646C330.259 26.7675 328.791 52.3985 328.791 52.3985C328.791 52.3985 340.427 27.9852 359.087 35.9779C369.366 40.3838 371.498 53.4686 369.1 60.4059C364.392 74.0148 346.942 79.3579 340.272 82.5683C330.222 87.3948 327.462 88.4428 322.29 93.6236H322.297Z" fill="currentColor"></path>
+<path d="M312.44 131.55C319.775 131.55 325.721 125.602 325.721 118.266C325.721 110.929 319.775 104.982 312.44 104.982C305.105 104.982 299.158 110.929 299.158 118.266C299.158 125.602 305.105 131.55 312.44 131.55Z" fill="currentColor"></path>
+</g>
+<defs>
+<clipPath id="wmclip">
+<rect width="370" height="134" fill="currentColor"></rect>
+</clipPath>
+</defs></symbol>
+</svg>
 
-  <!-- 프로필 링크: i.ditto.at/u/{handle} -->
-  <section class="card" id="profile" hidden>
-    <div class="avatar avatar-fallback" id="avatarFallback"></div>
-    <img class="avatar" id="avatar" alt="" hidden>
-    <h1 class="name" id="name"></h1>
-    <p class="handle" id="handle"></p>
-    <p class="sub">위젯으로 서로의 하루를 주고받는 친구들의 공간</p>
-    <a class="cta" href="https://ditto.at/download/">ditto! 앱에서 열기</a>
-    <p class="cta-note">앱이 설치돼 있으면 바로 열리고,<br>없으면 App Store로 안내해드려요.</p>
-    <div class="steps">
-      <div>1&nbsp;&nbsp;ditto! 앱을 설치해요</div>
-      <div>2&nbsp;&nbsp;<b id="stepHandle"></b> 님을 친구로 추가해요</div>
-      <div>3&nbsp;&nbsp;서로의 플래터를 구경해요</div>
+<main class="page" id="invite">
+  <p class="eyebrow mono">ditto! invitation</p>
+  <h1 id="headline">친구가 ditto!에 초대했어요</h1>
+  <p class="sub">위젯으로 서로의 하루를 주고받는 친구들의 공간</p>
+
+  <div class="stage" id="stage">
+    <div class="card" id="card" role="button" tabindex="0" aria-label="초대장 — 눌러서 뒤집기">
+      <div class="face front">
+        <div class="painting" aria-hidden="true"><canvas id="paint"></canvas><canvas id="paintNext"></canvas></div>
+        <div class="stub">
+          <svg class="wm" viewBox="0 0 370 134" role="img" aria-label="ditto!"><use href="#wm"/></svg>
+          <div class="avatar" id="avatar" aria-hidden="true"></div>
+          <dl class="rows">
+            <div class="row"><dt class="mono">From</dt><dd id="from">친구<small id="fromHandle"></small></dd></div>
+            <div class="row"><dt class="mono">Sent</dt><dd id="sent">—</dd></div>
+            <div class="row"><dt class="mono">Code</dt><dd class="mono" id="codeOnCard">------</dd></div>
+          </dl>
+          <svg class="barcode" id="barcode" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
+        <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
+      </div>
+      <div class="face back" aria-hidden="true">
+        <div class="top mono"><span>Invitation</span><span id="backNo">No. ------</span></div>
+        <svg class="press" viewBox="0 0 370 134"><use href="#wm"/></svg>
+        <div class="bottom mono"><span class="msg" id="backMsg">같이 플래터 꾸미자!</span><span class="url" id="backUrl">i.ditto.at</span></div>
+        <div class="grain"></div><div class="pearl"></div><div class="glare"></div>
+      </div>
     </div>
-  </section>
+  </div>
+  <p class="hint" id="hint">카드를 눌러 뒷면을 봐요</p>
+
+  <div class="swatches" id="swatches" role="group" aria-label="그림 고르기"></div>
+  <p class="sw-label" id="swLabel"></p>
+
+  <div class="actions">
+    <a class="cta" id="open" href="https://ditto.at/download/">ditto! 앱에서 열기</a>
+    <button class="copy" id="copy" type="button">초대코드 복사<span class="mono" id="codeBtn">------</span></button>
+  </div>
+  <p class="note">앱이 설치돼 있으면 이 링크가 앱에서 바로 열려요.<br>가입할 때 초대코드를 넣으면 바로 친구가 돼요.</p>
+
+  <ol class="steps">
+    <li><span class="n">1</span><span>ditto! 앱을 설치하고 열어요</span></li>
+    <li><span class="n">2</span><span>가입할 때 <b>초대코드</b>를 입력해요</span></li>
+    <li><span class="n">3</span><span id="step3">친구의 플래터에서 다시 만나요</span></li>
+  </ol>
 </main>
-<a class="banner" id="banner" href="https://ditto.at/download/" hidden><img class="banner-mark" src="/wordmark.svg" alt="ditto!"><span class="banner-text">앱에서 더 자세히 보기</span><span class="banner-btn">다운로드</span></a>
+
 <script>
 (function () {
+  "use strict";
   var SB = "https://lisqekczixwzshmpewzq.supabase.co";
   var KEY = "sb_publishable_wZhXPAWXra62J60VkWJlhQ_2OPv-Zpf";
-  var seg = location.pathname.split("/").filter(Boolean);
   var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // 프로필 링크
-  if (seg[0] === "u" && seg[1]) {
-    var handle = decodeURIComponent(seg[1]).replace(/^@/, "");
-    // 프로필은 ditto.at/{아이디}로 옮겼다 (사용자별 링크 미리보기). 옛 링크는 그쪽으로 보낸다.
-    if (/^[A-Za-z0-9_.]{1,30}$/.test(handle)) { location.replace("https://ditto.at/" + handle.toLowerCase()); return; }
-    var show = function (name, avatar) {
-      $("name").textContent = name || handle;
-      $("handle").textContent = "@" + handle;
-      $("stepHandle").textContent = "@" + handle;
-      $("avatarFallback").textContent = (name || handle).charAt(0).toUpperCase();
-      if (avatar && /^https:\/\//.test(avatar)) {
-        var img = $("avatar");
-        img.onload = function () { img.hidden = false; $("avatarFallback").hidden = true; };
-        img.src = avatar;
-      }
-      document.title = (name || handle) + " (@" + handle + ") · ditto!";
-    };
-    show(null, null);
-    $("profile").hidden = false; $("banner").hidden = false;
-    if (/^[A-Za-z0-9_.]{1,30}$/.test(handle)) {
-      fetch(SB + "/rest/v1/profiles?select=nickname,handle,avatar_url&handle=eq." + encodeURIComponent(handle) + "&limit=1", { headers: { apikey: KEY } })
-        .then(function (r) { return r.ok ? r.json() : []; })
-        .then(function (rows) { if (rows && rows[0]) show(rows[0].nickname, rows[0].avatar_url); })
-        .catch(function () {});
-    }
-    return;
+  // ── 핸들 색 (DittoPrototype/DesignSystem/Elements/ProfileHandleColors.swift 와 같은 값) ──
+  var HANDLE = {
+    lavender: ["#CAB7F2", "#B092ED"], slate: ["#A8B3BF", "#79899B"], lime: ["#C5D593", "#A5BE57"],
+    teal: ["#8FB2BD", "#5C8F9F"], gold: ["#D5C194", "#BF9F5B"], coral: ["#EDAE91", "#E07B4C"],
+    pink: ["#EEAFC7", "#E37CA2"], sage: ["#B3BDA6", "#85946F"], mauve: ["#B5ADBA", "#908498"],
+    sky: ["#ADD5E5", "#79BBD4"]
+  };
+  function handlePair(v) {
+    if (v && HANDLE[v]) return HANDLE[v];
+    if (v && /^#[0-9a-f]{6}$/i.test(v)) return [mixHex(v, "#FFFFFF", .45), v];
+    return HANDLE.lavender;
   }
 
-  // 초대 링크 (코드가 아니면 ditto.at으로)
-  var code = /^[A-Za-z0-9]{6}$/.test(seg[0] || "") ? seg[0].toUpperCase() : null;
+  // ── 그림 = 주파수 동심원 (InviteTicket.swift PaintingStyle 과 같은 값) ──
+  // rings: 바깥에서 안쪽으로 번갈아 도는 띠 색. top/bottom: 위·아래로 번지는 바탕 기운.
+  var PAINTINGS = {
+    splup:   { name: "디토",   rings: ["#FA97E2", "#AA4AF4", "#F4F9FF", "#B9A9FA", "#6655D2"], top: "#FA97E2", bottom: "#B9A9FA" },
+    platter: { name: "플래터", rings: ["#FA97E2", "#FF925D", "#F9F871", "#F4F9FF", "#48B5F4"], top: "#FA97E2", bottom: "#48B5F4" },
+    night:   { name: "밤",     rings: ["#2D0080", "#6D01B9", "#AA4AF4", "#FA97E2", "#4E009C"], top: "#4E009C", bottom: "#2D0080" },
+    mine:    null   // 보낸 사람 핸들 색 — 아래에서 채운다
+  };
+  var ORDER = ["splup", "platter", "night", "mine"];
+
+  function hex2rgb(h) { h = h.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
+  function mixHex(a, b, t) { var x = hex2rgb(a), y = hex2rgb(b); return "#" + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, "0"); }).join(""); }
+  function smooth(t) { return t * t * (3 - 2 * t); }
+
+  function renderPainting(canvas, p, seed) {
+    var N = 140, W = Math.round(N * 1.12), H = Math.round(N * 1.12 * 1.5 / 1.32);
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext("2d"), img = ctx.createImageData(W, H), d = img.data;
+    var rings = p.rings.map(hex2rgb), n = rings.length, top = hex2rgb(p.top), bot = hex2rgb(p.bottom);
+    var cx = .5, cy = .6, k = 8.2;
+    for (var y = 0; y < H; y++) {
+      for (var x = 0; x < W; x++) {
+        var u = x / W - cx, v = (y / H - cy) * 1.18;
+        var r = Math.sqrt(u * u + v * v), a = Math.atan2(v, u);
+        var wob = Math.min(1, r * 5);   // 가운데는 흔들림 없이 둥글게
+        r += wob * (.014 * Math.sin(a * 2 + seed) + .006 * Math.sin(a * 5 - seed * 1.7));
+        var s = r * k + seed * .15, i = Math.floor(s), f = smooth(smooth(s - i));
+        var c0 = rings[((i % n) + n) % n], c1 = rings[(((i + 1) % n) + n) % n];
+        var vy = y / H, wTop = Math.max(0, .5 - vy) * .7, wBot = Math.max(0, vy - .55) * .8;
+        var o = (y * W + x) * 4;
+        for (var ch = 0; ch < 3; ch++) {
+          var c = c0[ch] + (c1[ch] - c0[ch]) * f;
+          c = c + (top[ch] - c) * wTop;
+          c = c + (bot[ch] - c) * wBot;
+          d[o + ch] = c;
+        }
+        d[o + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  // ── Code128-B (실제로 찍힌다: i.ditto.at/{코드}) ──
+  var C128 = ["212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"];
+  function drawBarcode(svg, text) {
+    var vals = [104], sum = 104;
+    for (var i = 0; i < text.length; i++) { var v = text.charCodeAt(i) - 32; vals.push(v); sum += v * (i + 1); }
+    vals.push(sum % 103); vals.push(106);
+    var x = 10, rects = "";   // 10모듈 여백
+    vals.forEach(function (v) {
+      var pat = C128[v];
+      for (var j = 0; j < pat.length; j++) {
+        var w = +pat[j];
+        if (j % 2 === 0) rects += '<rect x="' + x + '" y="0" width="' + w + '" height="1"/>';
+        x += w;
+      }
+    });
+    svg.setAttribute("viewBox", "0 0 " + (x + 10) + " 1");
+    svg.innerHTML = '<g fill="#171719">' + rects + "</g>";
+  }
+
+  // ── 데이터 ──
+  var seg = location.pathname.split("/").filter(Boolean);
+  var q = new URLSearchParams(location.search);
+  // 옛 프로필 링크 i.ditto.at/u/{handle} → ditto.at/{handle} (기존 페이지 동작 유지)
+  if (seg[0] === "u" && seg[1]) {
+    var uh = decodeURIComponent(seg[1]).replace(/^@/, "");
+    location.replace(/^[A-Za-z0-9_.]{1,30}$/.test(uh) ? "https://ditto.at/" + uh.toLowerCase() : "https://ditto.at/");
+    return;
+  }
+  var demo = location.protocol === "file:" || q.has("demo") || /\/design\/invite-card/.test(location.pathname);
+  var code = /^[A-Za-z0-9]{6}$/.test(seg[0] || "") ? seg[0].toUpperCase() : (demo ? (q.get("code") || "7K2QXA").toUpperCase() : null);
   if (!code) { location.replace("https://ditto.at/"); return; }
-  $("code").textContent = code;
-  document.title = "ditto! 초대장";
-  $("invite").hidden = false;
+
+  var person = { name: null, handle: null, color: null, avatar: null };
+  var current = ORDER.indexOf(q.get("p")) >= 0 ? q.get("p") : "splup";
+  var seed = 0; for (var si = 0; si < code.length; si++) seed += code.charCodeAt(si) * (si + 1);
+  seed = (seed % 628) / 100;   // 같은 코드 = 같은 무늬
+
+  function fmtDate(d) { return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0"); }
+  var sent = q.get("d") && /^\d{4}-\d{2}-\d{2}$/.test(q.get("d")) ? new Date(q.get("d") + "T00:00:00") : new Date();
+
+  function paint() {
+    var pair = handlePair(person.color);
+    PAINTINGS.mine = {
+      name: person.name ? person.name + "의 색" : "보낸 사람 색",
+      rings: [pair[0], "#F4F9FF", pair[1], mixHex(pair[1], "#AA4AF4", .35), pair[0]],
+      top: pair[0], bottom: mixHex(pair[1], "#FFFFFF", .2)
+    };
+    var av = $("avatar");
+    av.style.background = "linear-gradient(180deg," + pair[0] + "," + pair[1] + ")";
+    av.innerHTML = "";
+    if (person.avatar) {
+      var img = new Image(); img.alt = ""; img.onload = function () { av.innerHTML = ""; av.appendChild(img); };
+      img.src = person.avatar;
+    }
+    if (!av.firstChild) av.textContent = (person.name || "d").charAt(0).toUpperCase();
+
+    $("from").firstChild.nodeValue = person.name || "친구";
+    $("fromHandle").textContent = person.handle ? "@" + person.handle : "";
+    $("headline").textContent = person.name ? person.name + "님이 ditto!에 초대했어요" : "친구가 ditto!에 초대했어요";
+    if (person.name) $("step3").textContent = person.name + "님의 플래터에서 다시 만나요";
+    document.title = person.name ? person.name + "님의 ditto! 초대장" : "ditto! 초대장";
+    buildSwatches();
+  }
+
+  $("sent").textContent = fmtDate(sent);
+  $("codeOnCard").textContent = code;
+  $("codeBtn").textContent = code;
+  $("backNo").textContent = "No. " + code;
+  $("backUrl").textContent = "i.ditto.at/" + code;
+  drawBarcode($("barcode"), "i.ditto.at/" + code);
+
+  // ── 그림 고르기 (바꾸면 옆으로 쓸려 넘어간다) ──
+  function swatchBg(p) { return "radial-gradient(circle at 50% 60%," + p.rings[2] + " 0 18%," + p.rings[1] + " 34%," + p.rings[0] + " 58%," + p.bottom + " 100%)"; }
+  function buildSwatches() {
+    var box = $("swatches"); box.innerHTML = "";
+    ORDER.forEach(function (key) {
+      var p = PAINTINGS[key], b = document.createElement("button");
+      b.className = "sw"; b.type = "button"; b.style.background = swatchBg(p);
+      b.setAttribute("aria-label", p.name); b.setAttribute("aria-pressed", key === current ? "true" : "false");
+      b.addEventListener("click", function () { choose(key); });
+      box.appendChild(b);
+    });
+    $("swLabel").textContent = PAINTINGS[current].name;
+  }
+  var wiping = false;
+  function choose(key) {
+    if (key === current || wiping) return;
+    current = key; buildSwatches();
+    var next = $("paintNext");
+    renderPainting(next, PAINTINGS[key], seed);
+    if (reduce) { renderPainting($("paint"), PAINTINGS[key], seed); return; }
+    wiping = true;
+    next.classList.remove("wipe"); void next.offsetWidth; next.classList.add("wipe");
+    setTimeout(function () {
+      renderPainting($("paint"), PAINTINGS[key], seed);
+      next.classList.remove("wipe"); wiping = false;
+    }, 780);
+  }
+
+  // ── 기울이기 · 뒤집기 ──
+  var card = $("card"), stage = $("stage"), flipped = false, tx = 0, ty = 0, down = null, moved = false, idle = !reduce, t0 = performance.now();
+  function apply(rx, ry, lx, ly, live) {
+    card.classList.toggle("live", !!live);
+    card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
+    var gx = flipped ? 100 - lx : lx;
+    card.style.setProperty("--gx", gx + "%"); card.style.setProperty("--gy", ly + "%");
+    card.style.setProperty("--px", (100 - gx) + "%"); card.style.setProperty("--py", (100 - ly) + "%");
+    card.style.setProperty("--go", live ? .7 : .45);
+  }
+  function tiltFrom(e) {
+    var r = card.getBoundingClientRect();
+    var x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+    apply((.5 - y) * 16, (x - .5) * 22, x * 100, y * 100, true);
+  }
+  function rest() { apply(0, 0, 30, 20, false); }
+  stage.addEventListener("pointermove", function (e) {
+    if (e.pointerType === "mouse" && !down) { idle = false; tiltFrom(e); return; }
+    if (!down) return;
+    if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8) moved = true;
+    if (moved) tiltFrom(e);
+  });
+  stage.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") { rest(); } });
+  stage.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY }; moved = false; idle = false; });
+  stage.addEventListener("pointercancel", function () { down = null; rest(); });
+  stage.addEventListener("pointerup", function (e) {
+    var wasTap = down && !moved; down = null;
+    if (wasTap && card.contains(e.target)) flip(); else if (e.pointerType !== "mouse") rest();
+  });
+  card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+  function flip() {
+    flipped = !flipped;
+    if (navigator.vibrate) navigator.vibrate(8);
+    $("hint").textContent = flipped ? "다시 누르면 앞면으로 돌아와요" : "카드를 눌러 뒷면을 봐요";
+    rest();
+  }
+  // 가만히 두면 천천히 숨 쉬듯 흔들린다 — 빛이 종이 위를 지나가는 게 보이도록
+  function sway(now) {
+    if (idle) {
+      var t = (now - t0) / 1000;
+      var ry = Math.sin(t * .7) * 7, rx = Math.sin(t * .9 + 1) * 4;
+      card.classList.add("live");
+      card.style.transform = "rotateX(" + rx + "deg) rotateY(" + (ry + (flipped ? 180 : 0)) + "deg)";
+      card.style.setProperty("--gx", (50 + ry * 5) + "%"); card.style.setProperty("--gy", (30 - rx * 4) + "%");
+      card.style.setProperty("--px", (50 - ry * 5) + "%");
+      requestAnimationFrame(sway);
+    }
+  }
+  if (demo && q.has("og")) { document.documentElement.classList.add("og"); idle = false; apply(-4, 9, 70, 15, false); }
+  if (demo && q.has("back")) { flipped = true; idle = false; card.style.transition = "none"; rest(); card.classList.remove("live"); }
+  if (idle) requestAnimationFrame(sway);
+
+  // ── 코드 복사 ──
   $("copy").addEventListener("click", function () {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(code).then(function () {
-      $("copy").textContent = "복사됐어요!";
-      setTimeout(function () { $("copy").textContent = "코드 복사하기"; }, 1600);
+      var b = $("copy"), old = b.innerHTML;
+      b.textContent = "복사됐어요!";
+      setTimeout(function () { b.innerHTML = old; }, 1600);
     }, function () {});
+  });
+
+  // ── 첫 그림 + 보낸 사람 정보 ──
+  paint();
+  renderPainting($("paint"), PAINTINGS[current], seed);
+
+  if (demo) {
+    person = { name: q.has("name") ? q.get("name") || null : "지우", handle: q.has("h") ? q.get("h") || null : "jiwoo", color: q.get("c") || "pink", avatar: null };
+    paint(); renderPainting($("paint"), PAINTINGS[current], seed);
+    return;
+  }
+  // 코드 → 보낸 사람 이름 (invite_owner). ?h= 로 온 프로필은 이름이 같을 때만 믿는다.
+  function rpcOwner() {
+    return fetch(SB + "/rest/v1/rpc/invite_owner", {
+      method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ code: code })
+    }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+  }
+  function profileBy(handle) {
+    if (!handle || !/^[A-Za-z0-9_.]{1,30}$/.test(handle)) return Promise.resolve(null);
+    return fetch(SB + "/rest/v1/profiles?select=nickname,handle,avatar_url,handle_color&handle=eq." + encodeURIComponent(handle.toLowerCase()) + "&limit=1", { headers: { apikey: KEY } })
+      .then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) { return rows && rows[0] || null; }).catch(function () { return null; });
+  }
+  Promise.all([rpcOwner(), profileBy(q.get("h"))]).then(function (res) {
+    var owner = typeof res[0] === "string" ? res[0] : null, prof = res[1];
+    if (!owner) return;
+    person.name = owner;
+    if (prof && prof.nickname === owner) {
+      person.handle = prof.handle;
+      person.color = prof.handle_color;
+      person.avatar = prof.avatar_url && /^https:\/\//.test(prof.avatar_url) ? prof.avatar_url : null;
+    }
+    paint();
+    if (current === "mine") renderPainting($("paint"), PAINTINGS.mine, seed);
   });
 })();
 </script>
