@@ -225,7 +225,7 @@
 
 <header class="gnb">
   <a href="https://ditto.place/" aria-label="ditto! 홈"><svg class="wm" viewBox="0 0 370 134"><use href="#wm" fill="currentColor"/></svg></a>
-  <a class="pill" id="getApp" href="https://ditto.place/download/">앱 받기</a>
+  <a class="pill" id="getApp" href="https://apps.apple.com/kr/app/id6824991758">앱 받기</a>
 </header>
 
 <main class="page">
@@ -260,10 +260,10 @@
   <div class="noapp" id="noapp" hidden><b>아직 디토 앱이 없나 봐요.</b> 앱을 받은 다음 이 링크를 다시 열거나, 가입할 때 초대코드 <b id="noappCode">------</b>를 넣어 주세요.</div>
 
   <div class="actions">
-    <a class="btn" id="open" href="https://ditto.place/download/">디토 앱에서 열기 <span class="ar" aria-hidden="true">→</span></a>
+    <a class="btn" id="open" href="https://apps.apple.com/kr/app/id6824991758">디토 앱에서 열기 <span class="ar" aria-hidden="true">→</span></a>
     <button class="btn line" id="copy" type="button"><span id="copyLabel">초대코드 복사</span><span class="code" id="codeBtn">------</span></button>
   </div>
-  <p class="note" id="note">앱이 있으면 바로 열려요. 아직 없다면 <a href="https://ditto.place/download/">출시 알림 받기 →</a></p>
+  <p class="note" id="note">앱이 있으면 바로 열려요. 아직 없다면 <a href="https://apps.apple.com/kr/app/id6824991758">App Store에서 받기 →</a></p>
 
   <ol class="steps">
     <li><span class="n">1</span><span>디토 앱을 받고 열어요</span></li>
@@ -365,7 +365,7 @@
   if (noApp) {
     $("noapp").hidden = false; $("noappCode").textContent = code;
     $("open").firstChild.nodeValue = "디토 앱 받기 ";
-    $("open").href = "https://ditto.place/download/";
+    $("open").href = "https://apps.apple.com/kr/app/id6824991758";
     $("note").innerHTML = '앱을 받은 뒤엔 이 링크에서 <a id="retry" href="#">디토 앱에서 열기 →</a>';
   } else if (!isIOS && !demo) {
     $("note").textContent = "디토는 iPhone 앱이에요. iPhone에서 이 링크를 열면 앱으로 바로 이어져요.";
